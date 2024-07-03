@@ -9,15 +9,20 @@
 ## 1. 전체 서비스 흐름
 
 이 다이어그램은 사용자의 관점에서 콘서트 예약 서비스의 전체 흐름을 보여줍니다.
-![seq_main.svg](static/seq_main.svg)
+<p align="center">
+<img src="static/seq_main.svg" alt="대체 텍스트" width="50%" >
+</p>
 
 ## 2. 백엔드 구현 관점의 예약 프로세스
 
 이 다이어그램은 백엔드 개발자의 관점에서 예약 프로세스의 상세한 흐름을 보여줍니다.
-![systemArcSeq.png](static/systemArcSeq.png)
-
+<p align="center">
+<img src="static/systemArcSeq.png" alt="대체 텍스트" width="80%">
+</p>
 
 ## 3. 시스템 아키텍처 관점의 예약 흐름
 
 이 다이어그램은 시스템 아키텍트의 관점에서 예약 흐름의 전체 아키텍처를 보여줍니다.
-![backend_api_seq.png](static/backend_api_seq.png)
+<p align="center">
+<img src="static/backend_api_seq.png" alt="대체 텍스트" width="80%">
+</p>
