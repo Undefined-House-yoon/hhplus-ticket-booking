@@ -1,7 +1,7 @@
 # 데이터베이스 테이블 설명
 
 <p align="center">
-<img src="static/initTable.png" alt="대체 텍스트" width="80%">
+<img src="static/erd_table.png" alt="대체 텍스트" width="80%">
 </p>
 
 ## Users 테이블
