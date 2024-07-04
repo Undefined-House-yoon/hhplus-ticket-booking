@@ -1,14 +1,13 @@
+# 데이터베이스 테이블 설명
+
 <p align="center">
 <img src="static/initTable.png" alt="대체 텍스트" width="80%">
 </p>
 
-# 데이터베이스 테이블 설명
-
 ## Users 테이블
 사용자 정보를 저장하는 테이블입니다.
 - `id`: 사용자의 고유 식별자
-- `uuid`: 사용자의 고유 식별 문자열
-- `email`: 사용자의 이메일 주소
+- `username`: 사용자의 이메일 주소
 - `balance`: 사용자의 계정 잔액
 - `created_at`: 계정 생성 시간
 
@@ -16,14 +15,23 @@
 콘서트 정보를 저장하는 테이블입니다.
 - `id`: 콘서트의 고유 식별자
 - `name`: 콘서트 이름
+- `created_at`: 콘서트 정보 생성 시간
+
+## ConcertsDetail 테이블
+콘서트의 행사일 및 티켓 가격,좌석 등 여러정보를 저장하는 테이블입니다.
+- `id`: 콘서트디테일 고유 식별자
+- `concert_id`: 연관된 콘서트의 ID
 - `total_seats`: 총 좌석 수
+- `location`: 장소
+- `price` : 가격정보 // 등급별 적용도 고려중 
+- `open_date`: 티켓 오픈일
 - `date`: 콘서트 날짜
 - `created_at`: 콘서트 정보 생성 시간
 
 ## Seats 테이블
 콘서트의 개별 좌석 정보를 저장하는 테이블입니다.
 - `id`: 좌석의 고유 식별자
-- `concert_id`: 연관된 콘서트의 ID
+- `concert_detail_id`: 연관된 콘서트의 ID
 - `seat_number`: 좌석 번호
 - `status`: 좌석 상태 (이용가능, 임시예약, 예약완료)
 
@@ -31,7 +39,7 @@
 사용자의 좌석 예약 정보를 저장하는 테이블입니다.
 - `id`: 예약의 고유 식별자
 - `user_id`: 예약한 사용자의 ID
-- `concert_id`: 예약된 콘서트의 ID
+- `concert_detail_id`: 예약된 콘서트의 ID
 - `seat_id`: 예약된 좌석의 ID
 - `status`: 예약 상태 (임시예약, 예약확정, 취소됨)
 - `expires_at`: 임시 예약의 만료 시간
