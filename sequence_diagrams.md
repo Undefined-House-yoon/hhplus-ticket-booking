@@ -17,12 +17,12 @@
 
 이 다이어그램은 백엔드 개발자의 관점에서 예약 프로세스의 상세한 흐름을 보여줍니다.
 <p align="center">
-<img src="static/systemArcSeq.png" alt="대체 텍스트" width="80%">
+<img src="static/backend_api_seq.png" alt="대체 텍스트" width="80%">
 </p>
 
 ## 3. 시스템 아키텍처 관점의 예약 흐름
 
 이 다이어그램은 시스템 아키텍트의 관점에서 예약 흐름의 전체 아키텍처를 보여줍니다.
 <p align="center">
-<img src="static/backend_api_seq.png" alt="대체 텍스트" width="80%">
+<img src="static/systemArcSeq.png" alt="대체 텍스트" width="80%">
 </p>
