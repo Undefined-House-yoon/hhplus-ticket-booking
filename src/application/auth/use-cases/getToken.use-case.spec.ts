@@ -4,7 +4,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { UserId } from '../../../domain/auth/vo/user-id.vo';
 import { Token } from '../../../domain/auth/entities/token';
 import { CreateTokenDto } from '../../../api/auth/dto/create-token.dto';
-import { TokenRepository, TokenRepositoryImpl } from '../../../domain/auth/repositories/token.repository';
+import { TokenRepository } from '../../../domain/auth/repositories/token.repository';
 import { AuthModule } from '../../../api/auth/auth.module';
 
 
