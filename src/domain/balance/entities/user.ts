@@ -1,6 +1,6 @@
 export class User {
   constructor(
-    public id: string,
+    public id: number,
     public balance: number
   ) {}
 }

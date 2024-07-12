@@ -7,7 +7,7 @@ import { User } from '../../../domain/balance/entities/user';
 export class UserRepositoryImpl implements UserRepository {
   private users: User[] = [];
 
-  async findById(id: string): Promise<User | null> {
+  async findById(id: number): Promise<User | null> {
     return this.users.find(user => user.id === id) || null;
   }
 

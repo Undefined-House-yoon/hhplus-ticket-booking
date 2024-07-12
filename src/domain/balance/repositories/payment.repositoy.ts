@@ -1,7 +1,7 @@
 import { Payment } from '../entities/payment';
 
-export interface PaymentRepository {
-  save(payment: Payment): Promise<Payment>;
-  findById(id: string): Promise<Payment | null>;
-  findByUserId(userId: string): Promise<Payment[]>;
+export abstract class PaymentRepository {
+  abstract save(payment: Payment): Promise<Payment>;
+  abstract findById(id: number): Promise<Payment | null>;
+  abstract findByUserId(userId: number): Promise<Payment[]>;
 }

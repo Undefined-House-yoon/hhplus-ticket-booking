@@ -5,7 +5,7 @@ import { UserRepository } from '../repositories/user.repository';
 export class BalanceService {
   constructor(private userRepository: UserRepository) {}
 
-  async chargeBalance(userId: string, amount: number): Promise<number> {
+  async chargeBalance(userId: number, amount: number): Promise<number> {
     const user = await this.userRepository.findById(userId);
     if (!user) {
       throw new Error('User not found');
@@ -15,7 +15,7 @@ export class BalanceService {
     return user.balance;
   }
 
-  async getBalance(userId: string): Promise<number> {
+  async getBalance(userId: number): Promise<number> {
     const user = await this.userRepository.findById(userId);
     if (!user) {
       throw new Error('User not found');

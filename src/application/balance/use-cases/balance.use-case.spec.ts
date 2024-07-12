@@ -27,23 +27,23 @@ describe('BalanceUseCase', () => {
   });
 
   describe('chargeBalance', () => {
-    it('should charge balance and return new balance', async () => {
+    it('[should]  잔액을 충전, 반환해야 합니다.', async () => {
       serviceMock.chargeBalance.mockResolvedValue(20000);
 
-      const result = await useCase.chargeBalance('user1', 10000);
+      const result = await useCase.chargeBalance(1, 10000);
 
-      expect(serviceMock.chargeBalance).toHaveBeenCalledWith('user1', 10000);
+      expect(serviceMock.chargeBalance).toHaveBeenCalledWith(1, 10000);
       expect(result).toEqual({ balance: 20000 });
     });
   });
 
   describe('getBalance', () => {
-    it('should return current balance', async () => {
+    it('[should]현재 잔액 반환', async () => {
       serviceMock.getBalance.mockResolvedValue(15000);
 
-      const result = await useCase.getBalance('user1');
+      const result = await useCase.getBalance(1);
 
-      expect(serviceMock.getBalance).toHaveBeenCalledWith('user1');
+      expect(serviceMock.getBalance).toHaveBeenCalledWith(1);
       expect(result).toEqual({ balance: 15000 });
     });
   });

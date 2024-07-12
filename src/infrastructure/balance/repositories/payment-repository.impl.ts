@@ -16,12 +16,12 @@ export class PaymentRepositoryImpl implements PaymentRepository {
     return payment;
   }
 
-  async findById(id: string): Promise<Payment | null> {
+  async findById(id: number): Promise<Payment | null> {
     const payment = this.payments.find(p => p.id === id);
     return payment || null;
   }
 
-  async findByUserId(userId: string): Promise<Payment[]> {
+  async findByUserId(userId: number): Promise<Payment[]> {
     return this.payments.filter(p => p.userId === userId);
   }
 }

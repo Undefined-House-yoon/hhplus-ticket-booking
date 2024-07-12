@@ -10,10 +10,10 @@ async function bootstrap() {
     .setTitle('콘서트 티케팅 예약')
     .setDescription('콘서트 티케팅 API')
     .setVersion('1.0')
-    .addTag('cats')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
-  await app.listen(3000);
+  await app.listen(4000);
 }
 bootstrap();

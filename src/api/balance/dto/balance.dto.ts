@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class ChargeBalanceDto {
   @ApiProperty()
-  userId: string;
+  userId: number;
 
   @ApiProperty()
   amount: number;
@@ -10,7 +10,7 @@ export class ChargeBalanceDto {
 
 export class GetBalanceDto {
   @ApiProperty()
-  userId: string;
+  userId: number;
 }
 
 export class BalanceResponseDto {

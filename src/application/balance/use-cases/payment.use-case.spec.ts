@@ -28,19 +28,19 @@ describe('PaymentUseCase', () => {
   });
 
   describe('processPayment', () => {
-    it('should process payment and return status and transactionId', async () => {
+    it('[should]결제 및 반품 상태와 transactionId를 처리해야 합니다.', async () => {
       const mockPayment = new Payment(1, 1, 1, 10000, 'success');
       serviceMock.processPayment.mockResolvedValue(mockPayment);
       let processPaymentDto =  new ProcessPaymentDto();
       processPaymentDto.amount=10000
-      processPaymentDto.amount=1
-      processPaymentDto.amount=1
+      processPaymentDto.userId=1
+      processPaymentDto.reservationId=1
       const result = await useCase.processPayment(processPaymentDto);
 
-      expect(serviceMock.processPayment).toHaveBeenCalledWith('user1', 'reservation1', 10000);
+      expect(serviceMock.processPayment).toHaveBeenCalledWith({"amount": 10000, "reservationId": 1, "userId": 1});
       expect(result).toEqual({
         status: 'success',
-        transactionId: 'transaction1',
+        transactionId: 1,
       });
     });
   });
