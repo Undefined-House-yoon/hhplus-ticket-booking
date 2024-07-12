@@ -6,7 +6,7 @@ import { ConcertModule } from './api/concerts/concert.module';
 import { BalanceModule } from './api/balance/balance.module';
 
 @Module({
-  imports: [BalanceModule],
+  imports: [AuthModule,BalanceModule],
   controllers: [AppController],
   providers: [AppService],
 })
