@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { QueueUseCase } from '../use-cases/queue.use-case';
-import { QueueService } from '../../../domain/auth/services/queue.service';
-import { AuthModule } from '../../../api/auth/auth.module';
+import { QueueUseCase } from '../../application/auth/use-cases/queue.use-case';
+import { QueueService } from '../../domain/auth/services/queue.service';
 import { QueueScheduler } from './queue-scheduler.use-case';
+import { IdentityModule } from '../Identity/identityModule';
 
 describe('QueueUseCase', () => {
   let scheduler: QueueScheduler;
@@ -11,14 +11,14 @@ describe('QueueUseCase', () => {
   beforeEach(async () => {
 
     const module: TestingModule = await Test.createTestingModule({
-      imports: [AuthModule],
+      imports: [IdentityModule],
     }).compile();
 
     scheduler = module.get<QueueScheduler>(QueueScheduler);
     useCase = module.get<QueueUseCase>(QueueUseCase);
     service = module.get<QueueService>(QueueService);
   });
-  test('[should]오래된 큐 아이템들을 정리합니다.', async () => {
+  it('[should]오래된 큐 아이템들을 정리합니다.', async () => {
 
     let oneHourAgo = new Date(Date.now() - (60 * 60 * 1000));
     // Date 객체를 모킹하여 항상 mockedDate를 반환하도록 설정

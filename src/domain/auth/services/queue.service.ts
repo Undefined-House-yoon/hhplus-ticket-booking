@@ -12,6 +12,9 @@ export class QueueService {
 
   // 새로운 대기열 항목 추가
   async addItem(userId: number): Promise<number> {
+    const existingItem = this.queue.find(item => item.userId === userId);
+    if(existingItem)throw Error('User already in queue');
+
     const newItem: QueueItem = {
       id: this.currentId++,
       userId,
@@ -40,6 +43,7 @@ export class QueueService {
     const item = this.queue.find(item => item.userId === userId && !item.processed);
     return item || null;
   }
+
 
   // 큐의 다음 아이템을 처리
   async processNextItem(): Promise<QueueItem | null> {

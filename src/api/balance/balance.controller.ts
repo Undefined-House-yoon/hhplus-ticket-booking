@@ -4,8 +4,6 @@ import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody } from '@nes
 import { AuthGuard } from '@nestjs/passport';
 import { BalanceUseCase } from '../../application/balance/use-cases/balance.use-case';
 import { BalanceResponseDto, ChargeBalanceDto, GetBalanceDto } from './dto/balance.dto';
-import { GetTokenUseCase } from '../../application/auth/use-cases/getToken.use-case';
-import { CreateTokenDto } from '../auth/dto/create-token.dto';
 
 @ApiTags('Balance')
 @Controller('balance')

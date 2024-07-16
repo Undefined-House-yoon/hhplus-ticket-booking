@@ -1,8 +1,7 @@
-import { Injectable, Inject } from '@nestjs/common';
-import { UserId } from '../vo/user-id.vo';
+import { Injectable } from '@nestjs/common';
 import { Token } from '../entities/token';
 import { TokenRepository } from '../repositories/token.repository';
-import { CreateTokenDto } from '../../../api/auth/dto/create-token.dto';
+import { CreateTokenDto } from '../../../api/Identity/dto/create-token.dto';
 
 @Injectable()
 export class AuthService {
@@ -12,8 +11,7 @@ export class AuthService {
   }
 
   async createToken(createTokenDto: CreateTokenDto): Promise<Token> {
-    const userId = new UserId(createTokenDto.userId);
-    const token = new Token(userId);
+    const token = new Token(createTokenDto.userId);
     return await this.tokenRepository.save(token);
   }
 }

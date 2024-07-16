@@ -13,6 +13,7 @@ import { UserRepository } from '../../domain/balance/repositories/user.repositor
 import { PaymentRepository } from '../../domain/balance/repositories/payment.repositoy';
 import { ConcertModule } from '../concerts/concert.module';
 import { ReservationRepository } from '../../domain/concerts/repositories/reservation.repository';
+import { UserService } from '../../domain/balance/services/user.service';
 
 @Module({
   imports: [ConcertModule],
@@ -34,7 +35,9 @@ import { ReservationRepository } from '../../domain/concerts/repositories/reserv
       provide: ReservationRepository,
       useClass: ReservationRepositoryImpl,
     },
+    UserService,{provide: UserRepository,useClass: UserRepositoryImpl}
   ],
+  exports:[BalanceService]
 })
 export class BalanceModule {
 }

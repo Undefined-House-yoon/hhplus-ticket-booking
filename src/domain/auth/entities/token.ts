@@ -1,4 +1,3 @@
-import { UserId } from '../vo/user-id.vo';
 
 /**
  * 토큰 테스트
@@ -9,13 +8,13 @@ export class Token {
   private readonly expiredAt: number;
 
 
-  constructor(private readonly userId: UserId) {
-    this.value = this.generateTokenValue();
+  constructor(private readonly userId: number) {
     this.entryTime = Date.now();
     this.expiredAt = Date.now() + 5 * 60 * 1000; // 5분 더함
+    this.value = this.generateTokenValue();
   }
 
-  getUserId(): UserId {
+  getUserId(): number {
     return this.userId;
   }
 
@@ -25,6 +24,6 @@ export class Token {
 
  // 이값을 조합해서 jwt나 혹은 추후 바뀔 대기열대비 토큰
   private generateTokenValue(): string {
-    return `value:${this.getUserId().value},entryTime:${this.entryTime},expiredAt:${this.expiredAt}`;
+    return `value:${this.getUserId()},entryTime:${this.entryTime},expiredAt:${this.expiredAt}`;
   }
 }

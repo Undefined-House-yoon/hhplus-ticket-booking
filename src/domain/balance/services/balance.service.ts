@@ -10,7 +10,13 @@ export class BalanceService {
     if (!user) {
       throw new Error('User not found');
     }
+
+    if (amount < 0 && Math.abs(amount) > user.balance) {
+      throw new Error('Invalid amount');
+    }
+
     user.balance += amount;
+
     await this.userRepository.save(user);
     return user.balance;
   }

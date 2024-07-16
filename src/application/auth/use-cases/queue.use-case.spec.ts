@@ -1,8 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { TokenRepository } from '../../../domain/auth/repositories/token.repository';
-import { AuthModule } from '../../../api/auth/auth.module';
 import { QueueUseCase } from './queue.use-case';
 import { QueueService } from '../../../domain/auth/services/queue.service';
+import { IdentityModule } from '../../../api/Identity/identityModule';
 
 describe('QueueUseCase', () => {
   let useCase: QueueUseCase;
@@ -10,7 +9,7 @@ describe('QueueUseCase', () => {
   beforeEach(async () => {
 
     const module: TestingModule = await Test.createTestingModule({
-      imports: [AuthModule],
+      imports: [IdentityModule],
     }).compile();
 
     useCase = module.get<QueueUseCase>(QueueUseCase);
@@ -20,6 +19,12 @@ describe('QueueUseCase', () => {
     const userId: number = 1;
     const result: number = await useCase.addToQueue(userId);
     expect(result).toEqual(1); //최초 생성은 반드시 1 반환
+  });
+  // 실패 시나리오
+  test('[should fail] 동일한 사용자를 큐에 두 번 추가하려고 할 때', async () => {
+    const userId: number = 1;
+    await useCase.addToQueue(userId);
+    await expect(useCase.addToQueue(userId)).rejects.toThrow('User already in queue');
   });
 
   test('[should] 사용자 ID의 현재 큐 위치를 조회합니다.', async () => {
@@ -32,6 +37,26 @@ describe('QueueUseCase', () => {
 
     const result = useCase.getPosition(findUserid);
     await expect(result).resolves.toEqual(findUserid);
+  });
+
+  test('[should fail] 존재하지 않는 사용자 ID로 위치를 조회할 때', async () => {
+    const createNum = 1000;
+    const nonExistentUserId = 2000;
+
+    // 순서대로 유저를 생성해본 다음 비교함. 동시라면 다르게 생각해볼 필요가 있음
+    for (let userId = 1; userId < createNum; userId++) {
+      await useCase.addToQueue(userId);
+    }
+
+    const result = useCase.getPosition(nonExistentUserId);
+    await expect(result).resolves.toEqual(-1);
+  });
+
+  test('[should fail] 이미 처리된 아이템을 다시 처리하려고 할 때', async () => {
+    const createNum = 1000;
+    for (let userId = 1; userId <= createNum; userId++) {
+      await useCase.addToQueue(userId);
+    }
   });
 
   test('[should]대기열의 아이템을 순서대로 processed 합니다. ', async () => {
@@ -52,6 +77,14 @@ describe('QueueUseCase', () => {
     }
     let processedResult: number = await useCase.processNextItem();
     expect(processedResult).toBeNull();
+  });
+
+
+  test('[should fail] 이미 처리된 아이템을 다시 처리하려고 할 때', async () => {
+    const createNum = 1000;
+    for (let userId = 1; userId <= createNum; userId++) {
+      await useCase.addToQueue(userId);
+    }
   });
 
   test('[should]오래된 큐 아이템들을 정리합니다.', async () => {
@@ -76,5 +109,7 @@ describe('QueueUseCase', () => {
     expect(result).toBe(expiredCreatedQueue);
     await expect(useCase.getPosition(item.userId)).resolves.toBe(createQueue - expiredCreatedQueue);
 
+
   });
+
 });
