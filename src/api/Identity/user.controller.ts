@@ -2,7 +2,7 @@ import { Body, Controller, Inject, Post } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { UserUseCase } from '../../application/auth/use-cases/user.use-case';
 import { CreateUserDto } from './dto/create-user.dto';
-import { User } from '../../domain/balance/entities/user';
+import { User } from '../../domain/user/entites/user';
 
 @Controller()
 export class UserController {

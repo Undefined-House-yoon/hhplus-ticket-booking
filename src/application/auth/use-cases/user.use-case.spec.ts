@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UserService } from '../../../domain/balance/services/user.service'; // UserService의 경로에 맞게 수정
+import { UserService } from '../../../domain/user/services/user.service'; // UserService의 경로에 맞게 수정
 import { CreateUserDto } from '../../../api/Identity/dto/create-user.dto'; // CreateUserDto의 경로에 맞게 수정
-import { User } from '../../../domain/balance/entities/user';
+import { User } from '../../../domain/user/entites/user';
 import { UserUseCase } from './user.use-case';
 import { IdentityModule } from '../../../api/Identity/identityModule'; // User의 경로에 맞게 수정
 

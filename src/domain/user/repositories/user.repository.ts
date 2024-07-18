@@ -1,4 +1,4 @@
-import { User } from '../entities/user';
+import { User } from '../entites/user';
 
 export abstract class UserRepository {
 
