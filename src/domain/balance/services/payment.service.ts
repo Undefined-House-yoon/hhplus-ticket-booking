@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { UserRepository } from '../repositories/user.repository';
+import { UserRepository } from '../../user/repositories/user.repository';
 import { ReservationRepository } from '../../concerts/repositories/reservation.repository';
 import { Payment } from '../entities/payment';
 import { PaymentRepository } from '../repositories/payment.repositoy';
