@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 
-import { UserRepositoryImpl } from '../../infrastructure/balance/repositories/user-repository.impl';
+import { UserRepositoryImpl } from '../../infrastructure/user/repositories/user-repository.impl';
 import { PaymentRepositoryImpl } from '../../infrastructure/balance/repositories/payment-repository.impl';
 import { ReservationRepositoryImpl } from '../../infrastructure/concerts/repositories/reservation-repository.impl';
 import { BalanceController } from './balance.controller';
@@ -9,11 +9,11 @@ import { BalanceUseCase } from '../../application/balance/use-cases/balance.use-
 import { PaymentUseCase } from '../../application/balance/use-cases/payment.use-case';
 import { BalanceService } from '../../domain/balance/services/balance.service';
 import { PaymentService } from '../../domain/balance/services/payment.service';
-import { UserRepository } from '../../domain/balance/repositories/user.repository';
+import { UserRepository } from '../../domain/user/repositories/user.repository';
 import { PaymentRepository } from '../../domain/balance/repositories/payment.repositoy';
 import { ConcertModule } from '../concerts/concert.module';
 import { ReservationRepository } from '../../domain/concerts/repositories/reservation.repository';
-import { UserService } from '../../domain/balance/services/user.service';
+import { UserService } from '../../domain/user/services/user.service';
 
 @Module({
   imports: [ConcertModule],

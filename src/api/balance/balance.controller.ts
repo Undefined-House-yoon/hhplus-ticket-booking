@@ -1,9 +1,10 @@
-import { Controller, Post, Get, Body, UseGuards, Inject } from '@nestjs/common';
+import { Controller, Post, Get, Body, UseGuards, Inject, UseFilters } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody } from '@nestjs/swagger';
 
 import { AuthGuard } from '@nestjs/passport';
 import { BalanceUseCase } from '../../application/balance/use-cases/balance.use-case';
 import { BalanceResponseDto, ChargeBalanceDto, GetBalanceDto } from './dto/balance.dto';
+import { CombinedExceptionFilter } from '../filter/exception.filter';
 
 @ApiTags('Balance')
 @Controller('balance')

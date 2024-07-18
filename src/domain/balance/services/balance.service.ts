@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { UserRepository } from '../repositories/user.repository';
+import { UserRepository } from '../../user/repositories/user.repository';
 
 @Injectable()
 export class BalanceService {
