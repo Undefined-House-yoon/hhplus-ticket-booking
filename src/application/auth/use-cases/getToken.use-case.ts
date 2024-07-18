@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { AuthService } from '../../../domain/auth/services/auth.service';
 import { Token } from '../../../domain/auth/entities/token';
-import { UserService } from '../../../domain/balance/services/user.service';
+import { UserService } from '../../../domain/user/services/user.service';
 import { CreateTokenDto } from '../../../api/Identity/dto/create-token.dto';
 
 @Injectable()

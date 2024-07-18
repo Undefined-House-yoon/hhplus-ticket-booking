@@ -3,8 +3,8 @@ import { AuthService } from '../../../domain/auth/services/auth.service';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Token } from '../../../domain/auth/entities/token';
 import { TokenRepository } from '../../../domain/auth/repositories/token.repository';
-import { UserService } from '../../../domain/balance/services/user.service';
-import { User } from '../../../domain/balance/entities/user';
+import { UserService } from '../../../domain/user/services/user.service';
+import { User } from '../../../domain/user/entites/user';
 import { IdentityModule } from '../../../api/Identity/identityModule';
 import { CreateTokenDto } from '../../../api/Identity/dto/create-token.dto';
 
