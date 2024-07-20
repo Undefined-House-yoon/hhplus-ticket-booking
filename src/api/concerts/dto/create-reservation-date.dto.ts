@@ -3,8 +3,8 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateReservationDto {
   @ApiProperty()
-  @IsString()
-  userId: string;
+  @IsNumber()
+  userId: number;
 
   @ApiProperty()
   @IsDateString()
