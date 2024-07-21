@@ -102,7 +102,7 @@ export class ReservationRepositoryImpl implements ReservationRepository {
     return concertDetail?.id || null;
   }
   // todo:SeatStatus 구현 필요
-  async updateSeatStatus(seatId: number, status: "string"): Promise<void> {
+  async updateSeatStatus(seatId: number, status:string): Promise<void> {
     await this.prisma.seat.update({
       where: { id: seatId },
       data: { status: status.toString() },

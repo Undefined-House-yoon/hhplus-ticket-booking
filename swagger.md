@@ -1,2 +1,17 @@
-![img.png](static/img.png)
-Swagger 데코레이터가 익숙하지 않아 @ApiOperation, @ApiResponse 등의 설명이 API 문서에 적용되지 않았습니다. Swagger 문서화를 위해 데코레이터를 정확히 사용하고 있으며, 추가적인 설정이나 사용 방법을 익혀야 할 필요가 있습니다.
+
+## 콘서트 티케팅 예약 swagger v1.0
+![img_1.png](static/img_1.png)
+![img_2.png](static/img_2.png)
+### balance
+![img_3.png](static/img_3.png)
+![img_4.png](static/img_4.png)
+### payment 결제 처리
+![img_5.png](static/img_5.png)
+### reservations 예약 처리
+![img_6.png](static/img_6.png)
+![img_7.png](static/img_7.png)
+![img_8.png](static/img_8.png)
+
+### 사용된 DTO
+![img_9.png](static/img_9.png)
+![img_10.png](static/img_10.png)
