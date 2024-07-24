@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { UserRepository } from '../../user/repositories/user.repository';
 import { ReservationRepository } from '../../concerts/repositories/reservation.repository';
-import { Payment } from '../entities/payment';
+import { Payment, PaymentStatus } from '../entities/payment';
 import { PaymentRepository } from '../repositories/payment.repositoy';
 import { ProcessPaymentDto } from '../../../api/balance/dto/payment.dto';
 
@@ -27,19 +27,20 @@ export class PaymentService {
       throw new Error('Reservation not found');
     }
 
-    user.balance -= processPaymentDto.amount;
+    user.withdraw(processPaymentDto.amount);
     await this.userRepository.save(user);
 
-    const payment = new Payment(
-      Date.now(),
-      processPaymentDto.userId,
-      processPaymentDto.reservationId,
-      processPaymentDto.amount,
-      'success'
+    const payment = Payment.createPayment(
+      {
+        userId:processPaymentDto.userId,
+        reservationId:processPaymentDto.reservationId,
+        amount:processPaymentDto.amount,
+        status:PaymentStatus.Success,
+      },
     );
     await this.paymentRepository.save(payment);
 
-    reservation.isPaid = true;
+    reservation.confirm();
     await this.reservationRepository.save(reservation);
 
     return payment;

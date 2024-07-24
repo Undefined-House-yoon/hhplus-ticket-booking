@@ -6,8 +6,8 @@ import { PaymentResponseDto, ProcessPaymentDto } from './dto/payment.dto';
 
 @ApiTags('Payment')
 @Controller('payment')
-// @UseGuards(AuthGuard)
-// @ApiBearerAuth()
+@UseGuards(AuthGuard('jwt'))
+@ApiBearerAuth()
 export class PaymentController {
   constructor(private paymentUseCase: PaymentUseCase) {}
 
@@ -17,7 +17,7 @@ export class PaymentController {
   @ApiResponse({ status: 400, description: '잘못된 요청 - 잘못된 입력' })
   @ApiResponse({ status: 404, description: '찾을 수 없음 - 사용자 또는 예약을 찾을 수 없음' })
   @ApiResponse({ status: 402, description: '결제 필요 - 잔액 부족' })
-  async processPayment(@Body()  processPaymentDto:ProcessPaymentDto) {
+  async processPayment(@Body()  processPaymentDto:ProcessPaymentDto): Promise<PaymentResponseDto> {
     return this.paymentUseCase.processPayment(processPaymentDto);
   }
 }

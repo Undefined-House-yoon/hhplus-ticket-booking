@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PaymentUseCase } from './payment.use-case';
 import { PaymentService } from '../../../domain/balance/services/payment.service';
-import { Payment } from '../../../domain/balance/entities/payment';
+import { Payment, PaymentStatus } from '../../../domain/balance/entities/payment';
 import { ProcessPaymentDto } from '../../../api/balance/dto/payment.dto';
 
 describe('PaymentUseCase', () => {
@@ -29,15 +29,22 @@ describe('PaymentUseCase', () => {
 
   describe('processPayment', () => {
     it('[should]결제 및 반품 상태와 transactionId를 처리해야 합니다.', async () => {
-      const mockPayment = new Payment(1, 1, 1, 10000, 'success');
+      const mockPayment = Payment.createPayment({
+        id: 1,
+        userId: 1,
+        reservationId: 1,
+        amount: 10000,
+        status: PaymentStatus.Success,
+        createdAt: new Date(),
+      });
       serviceMock.processPayment.mockResolvedValue(mockPayment);
-      let processPaymentDto =  new ProcessPaymentDto();
-      processPaymentDto.amount=10000
-      processPaymentDto.userId=1
-      processPaymentDto.reservationId=1
+      let processPaymentDto = new ProcessPaymentDto();
+      processPaymentDto.amount = 10000;
+      processPaymentDto.userId = 1;
+      processPaymentDto.reservationId = 1;
       const result = await useCase.processPayment(processPaymentDto);
 
-      expect(serviceMock.processPayment).toHaveBeenCalledWith({"amount": 10000, "reservationId": 1, "userId": 1});
+      expect(serviceMock.processPayment).toHaveBeenCalledWith({ 'amount': 10000, 'reservationId': 1, 'userId': 1 });
       expect(result).toEqual({
         status: 'success',
         transactionId: 1,

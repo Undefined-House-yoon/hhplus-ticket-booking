@@ -3,7 +3,7 @@ import { UserService } from '../../../domain/user/services/user.service'; // Use
 import { CreateUserDto } from '../../../api/Identity/dto/create-user.dto'; // CreateUserDto의 경로에 맞게 수정
 import { User } from '../../../domain/user/entites/user';
 import { UserUseCase } from './user.use-case';
-import { IdentityModule } from '../../../api/Identity/identityModule'; // User의 경로에 맞게 수정
+import { IdentityModule } from '../../../api/identityModule'; // User의 경로에 맞게 수정
 
 describe('UserUseCase', () => {
   let userUseCase: UserUseCase;

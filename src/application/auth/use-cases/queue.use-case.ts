@@ -36,9 +36,6 @@ export class QueueUseCase {
    */
   async processNextItem(): Promise<number | null> {
     const nextItem = await this.queueService.processNextItem();
-    if (!nextItem) return null;
-
-    await this.queueService.markItemAsProcessed(nextItem);
     return nextItem.userId;
   }
 

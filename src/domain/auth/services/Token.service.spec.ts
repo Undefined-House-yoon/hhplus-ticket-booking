@@ -1,10 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { AuthService } from './auth.service';
+import { TokenService } from './token.service';
 import { Token } from '../entities/token';
 import { TokenRepository } from 'src/domain/auth/repositories/token.repository';
 
-describe('AuthService', () => {
-  let service: AuthService;
+describe('TokenService', () => {
+  let service: TokenService;
   let mockTokenRepository: jest.Mocked<TokenRepository>;
 
   beforeEach(async () => {
@@ -14,7 +14,7 @@ describe('AuthService', () => {
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        AuthService,
+        TokenService,
         {
           provide: 'TokenRepository',
           useValue: mockTokenRepository,
@@ -22,20 +22,20 @@ describe('AuthService', () => {
       ],
     }).compile();
 
-    service = module.get<AuthService>(AuthService);
+    service = module.get<TokenService>(TokenService);
   });
 
   test('[should] 토큰을 생성합니다.', async () => {
     const userId = 1;
     const createTokenDto = { userId };
-    const expectedToken = new Token(userId);
+    const expectedToken = Token.create({ userId });
 
     mockTokenRepository.save.mockResolvedValue(expectedToken);
 
     const result = await service.createToken(createTokenDto);
 
     expect(result).toBeInstanceOf(Token);
-    expect(result.getUserId()).toBe(userId);
+    expect(result.userId).toBe(userId);
     expect(mockTokenRepository.save).toHaveBeenCalledWith(expect.any(Token));
   });
 });

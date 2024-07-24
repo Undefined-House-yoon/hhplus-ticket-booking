@@ -4,7 +4,7 @@ import { ReservationService } from '../../../domain/concerts/services/reservatio
 import { Reservation } from '../../../domain/concerts/entities/reservation';
 import { ReservationRepository } from '../../../domain/concerts/repositories/reservation.repository';
 import { CreateReservationDto } from '../../../api/concerts/dto/create-reservation-date.dto';
-import { ConcertModule } from '../../../api/concerts/concert.module';
+import { ConcertModule } from '../../../api/concert.module';
 
 describe('ReservationUseCase', () => {
   let useCase: ReservationUseCase;

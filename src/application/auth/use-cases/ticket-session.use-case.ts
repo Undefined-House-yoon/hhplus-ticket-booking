@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { TicketSessionService, ticketStatus } from '../../../domain/auth/services/ticket-session.service';
+import { TicketSessionService } from '../../../domain/auth/services/ticket-session.service';
+import { TicketStatus } from '../../../domain/auth/entities/ticket-session';
 
 @Injectable()
 export class TicketSessionUseCase {
@@ -20,10 +21,9 @@ export class TicketSessionUseCase {
    * @param userId 사용자 ID
    */
   async completePurchase(userId: number): Promise<void> {
-    let session = this.ticketSessionService.findSessionByUserId(userId);
-    if (!(!!session)) throw Error('Session is Not Found');
-    if (session.status !== ticketStatus.viewing) throw Error('Ticket already purchased');
-    this.ticketSessionService.purchasedTicket(session);
+    let session = await this.ticketSessionService.findSessionByUserId(userId);
+    if (session.status !== TicketStatus.viewing) throw Error('Ticket already purchased');
+    this.ticketSessionService.purchaseTicket(session);
   }
 
   /**

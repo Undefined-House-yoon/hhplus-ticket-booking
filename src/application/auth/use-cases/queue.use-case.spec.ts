@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { QueueUseCase } from './queue.use-case';
 import { QueueService } from '../../../domain/auth/services/queue.service';
-import { IdentityModule } from '../../../api/Identity/identityModule';
+import { IdentityModule } from '../../../api/identityModule';
 
 describe('QueueUseCase', () => {
   let useCase: QueueUseCase;

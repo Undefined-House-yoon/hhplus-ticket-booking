@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { AuthService } from '../../../domain/auth/services/auth.service';
+import { TokenService } from '../../../domain/auth/services/token.service';
 import { Token } from '../../../domain/auth/entities/token';
 import { UserService } from '../../../domain/user/services/user.service';
 import { CreateTokenDto } from '../../../api/Identity/dto/create-token.dto';
@@ -7,16 +7,13 @@ import { CreateTokenDto } from '../../../api/Identity/dto/create-token.dto';
 @Injectable()
 export class GetTokenUseCase {
   constructor(
-    private readonly authService: AuthService,
-    private readonly userService: UserService
+    private readonly authService: TokenService,
+    private readonly userService: UserService,
   ) {
   }
-  //todo:구현해야함.
-  async execute(creteTokenDto:CreateTokenDto) : Promise<Token> {
-    let user = await this.userService.findById(creteTokenDto.userId)
-    if (user) {
-      return await this.authService.createToken(creteTokenDto);
-    }
-    throw Error('User not found');
+
+  async execute(creteTokenDto: CreateTokenDto): Promise<Token> {
+    let user = await this.userService.findById(creteTokenDto.userId);
+    return await this.authService.createToken(creteTokenDto);
   }
 }

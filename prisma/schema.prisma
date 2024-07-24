@@ -16,12 +16,13 @@ datasource db {
 }
 
 model User {
-  id           Int           @id @default(autoincrement())
-  balance      Float
-  created_at   DateTime      @default(now())
-  reservations Reservation[]
-  queueTokens  QueueToken[]
-  queueItem    QueueItem?
+  id            Int            @id @default(autoincrement())
+  balance       Float
+  created_at    DateTime       @default(now())
+  reservations  Reservation[]
+  queueTokens   QueueToken[]
+  queueItem     QueueItem?
+  ticketSession TicketSession?
 }
 
 model Concert {
@@ -83,6 +84,15 @@ model QueueItem {
   processed Boolean  @default(false)
   createdAt DateTime @default(now())
   user      User     @relation(fields: [user_id], references: [id])
+}
+
+model TicketSession {
+  id               Int      @id @default(autoincrement())
+  user_id          Int      @unique
+  payment_due_at   DateTime
+  ticket_viewed_at DateTime
+  status           String
+  user             User     @relation(fields: [user_id], references: [id])
 }
 
 model QueueToken {

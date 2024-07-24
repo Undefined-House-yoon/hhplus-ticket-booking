@@ -7,7 +7,9 @@ export class UserService {
   constructor(private userRepository: UserRepository) {}
 
   async findById(id: number): Promise<User> | null{
-    return this.userRepository.findById(id);
+    const user = await this.userRepository.findById(id);
+    if(user) return user;
+    throw Error('User not found');
   }
   //있으면 그 정보 가져옴,
   async createUser(user: User): Promise<User>{

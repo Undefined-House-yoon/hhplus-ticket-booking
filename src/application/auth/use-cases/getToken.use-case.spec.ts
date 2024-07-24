@@ -1,11 +1,11 @@
 import { GetTokenUseCase } from './getToken.use-case';
-import { AuthService } from '../../../domain/auth/services/auth.service';
+import { TokenService } from '../../../domain/auth/services/token.service';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Token } from '../../../domain/auth/entities/token';
 import { TokenRepository } from '../../../domain/auth/repositories/token.repository';
 import { UserService } from '../../../domain/user/services/user.service';
 import { User } from '../../../domain/user/entites/user';
-import { IdentityModule } from '../../../api/Identity/identityModule';
+import { IdentityModule } from '../../../api/identityModule';
 import { CreateTokenDto } from '../../../api/Identity/dto/create-token.dto';
 
 
@@ -19,7 +19,7 @@ describe('GetTokenUseCase', () => {
     }).compile();
 
     useCase = module.get<GetTokenUseCase>(GetTokenUseCase);
-    module.get<AuthService>(AuthService);
+    module.get<TokenService>(TokenService);
     module.get<TokenRepository>(TokenRepository);
     let userService = module.get<UserService>(UserService);
     await userService.createUser(User.create({id:1,balance:0 }));
@@ -30,7 +30,7 @@ describe('GetTokenUseCase', () => {
 
     const createTokenDto: CreateTokenDto = new CreateTokenDto();
     createTokenDto.userId = userId;
-    const expectedToken = new Token(userId);
+    const expectedToken =  Token.create({ userId });
 
 
     const result = await useCase.execute(createTokenDto);

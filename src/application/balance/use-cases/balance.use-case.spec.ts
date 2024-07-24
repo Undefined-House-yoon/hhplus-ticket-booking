@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { BalanceUseCase } from './balance.use-case';
 import { BalanceService } from '../../../domain/balance/services/balance.service';
-import { BalanceModule } from '../../../api/balance/balance.module';
+import { BalanceModule } from '../../../api/balance.module';
 import { UserService } from '../../../domain/user/services/user.service';
 import { User } from '../../../domain/user/entites/user';
 

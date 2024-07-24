@@ -1,8 +1,17 @@
-import { Controller, Post, Body, Inject } from '@nestjs/common';
+import { Controller, Post, Body, Inject, HttpStatus, HttpException, Res } from '@nestjs/common';
 import { GetTokenUseCase } from '../../application/auth/use-cases/getToken.use-case';
 import { CreateTokenDto } from './dto/create-token.dto';
 import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { Token } from '../../domain/auth/entities/token';
+import {Response} from 'express';
 
+interface TokenResponse {
+  token: string;
+  queueInfo: {
+    position: number;
+    waitTime: string;
+  };
+}
 @Controller()
 export class AuthController {
 
@@ -13,6 +22,7 @@ export class AuthController {
    * 유저 토큰 발급 API
    * @route POST /token
    * @param {CreateTokenDto} createTokenDto - 유저 ID를 포함한 DTO
+   * @param res
    * @param {string} createTokenDto.userId - 유저 ID
    * @returns {Promise<Object>} 생성된 토큰과 대기열 정보
    */
@@ -23,7 +33,7 @@ export class AuthController {
     description: '토큰이 성공적으로 생성되었습니다.',
   })
   @ApiBody({ type: CreateTokenDto })
-  issueToken(@Body() createTokenDto: CreateTokenDto): Promise<any> {
-    return this.getTokenUseCase.execute(createTokenDto);
-  }
+  async issueToken(@Body() createTokenDto: CreateTokenDto): Promise<Token> {
+      return this.getTokenUseCase.execute(createTokenDto);
+    }
 }

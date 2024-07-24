@@ -15,7 +15,7 @@ export class BalanceService {
       throw new Error('Invalid amount');
     }
 
-    user.balance += amount;
+    user.deposit(amount);
 
     await this.userRepository.save(user);
     return user.balance;

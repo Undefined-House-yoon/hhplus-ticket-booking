@@ -2,36 +2,36 @@ import { Injectable } from '@nestjs/common';
 import { Token } from '../../../domain/auth/entities/token';
 import { TokenRepository } from '../../../domain/auth/repositories/token.repository';
 import { PrismaService } from '../../../../prisma/prisma.service';
-import { TokenMapper } from '../mapper/token.mapper';
+import { QueueTokenMapper } from '../mapper/queu-token.mapper';
 
 @Injectable()
-export class TokenRepositoryImpl implements TokenRepository{
-  private static tokens: Token[] = [];
-  constructor(private prisma:PrismaService) {
-  }
-
-
-  // async save(token: Token): Promise<Token>  {
-  //   const index = TokenRepositoryImpl.tokens.findIndex(u => u.getUserId() === token.getUserId());
-  //   if (index !== -1) {
-  //     TokenRepositoryImpl.tokens[index] = token;
-  //   } else {
-  //     TokenRepositoryImpl.tokens.push(token);
-  //   }
-  //   return token;
-  // }
+export class QueueTokenRepositoryImpl implements TokenRepository {
+  constructor(private prisma: PrismaService) {}
 
   async save(token: Token): Promise<Token> {
-     const result = await this.prisma.token.upsert({
-      where: { userId: token.getUserId() },
-      update: { token: token.getValue() },
+    const result = await this.prisma.queueToken.upsert({
+      where: { token: token.token },
+      update: {
+        activated_at: token.entryTime,
+        expires_at: token.expiredAt,
+      },
       create: {
-        userId: token.getUserId(),
-        token: token.getValue(),
+        user_id:token.userId,
+        status:"created",
+        token: token.token,
+        expires_at: token.expiredAt,
       },
     });
-     return TokenMapper.fromPrisma(result)
-
+    return QueueTokenMapper.toDomain(result);
   }
 
+  async findByToken(token: string): Promise<Token | null> {
+    const queueToken = await this.prisma.queueToken.findUnique({ where: { token } });
+    return queueToken ? QueueTokenMapper.toDomain(queueToken) : null;
+  }
+
+  async findByUserId(userId: number): Promise<Token | null> {
+    const queueToken = await this.prisma.queueToken.findFirst({ where: { user_id: userId } });
+    return queueToken ? QueueTokenMapper.toDomain(queueToken) : null;
+  }
 }
