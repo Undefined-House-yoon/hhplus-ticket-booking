@@ -1,11 +1,21 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { ConcertController } from './mock.controller';
+import { BalanceModule } from './api/balance.module';
+import { IdentityModule } from './api/identityModule';
+import { CombinedApiLoggerInterceptor } from './api/middlewares/interceptor/interceptor';
+import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
+import { CombinedExceptionFilter } from './api/middlewares/filter/exception.filter';
+import { ConcertModule } from './api/concert.module';
+import { PrismaModule } from './api/prisma.module';
 
 @Module({
-  imports: [],
-  controllers: [AppController,ConcertController],
-  providers: [AppService],
+  imports: [BalanceModule, PrismaModule],
+  providers: [ {
+    provide: APP_INTERCEPTOR,
+    useClass: CombinedApiLoggerInterceptor,
+  }, {
+    provide: APP_FILTER,
+    useClass: CombinedExceptionFilter,
+  }],
 })
-export class AppModule {}
+export class AppModule {
+}

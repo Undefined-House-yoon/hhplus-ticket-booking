@@ -1,0 +1,107 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            Int            @id @default(autoincrement())
+  balance       Float
+  created_at    DateTime       @default(now())
+  reservations  Reservation[]
+  queueTokens   QueueToken[]
+  queueItem     QueueItem?
+  ticketSession TicketSession?
+}
+
+model Concert {
+  id             Int             @id @default(autoincrement())
+  name           String
+  created_at     DateTime        @default(now())
+  concertDetails ConcertDetail[]
+}
+
+model ConcertDetail {
+  id           Int           @id @default(autoincrement())
+  concert_id   Int
+  total_seats  Int
+  location     String
+  price        Float
+  open_date    DateTime
+  date         DateTime
+  created_at   DateTime      @default(now())
+  concert      Concert       @relation(fields: [concert_id], references: [id])
+  seats        Seat[]
+  reservations Reservation[]
+}
+
+model Seat {
+  id                Int           @id @default(autoincrement())
+  concert_detail_id Int
+  seat_number       Int
+  status            String
+  concertDetail     ConcertDetail @relation(fields: [concert_detail_id], references: [id])
+  reservations      Reservation[]
+}
+
+model Reservation {
+  id                Int           @id @default(autoincrement())
+  user_id           Int
+  concert_detail_id Int
+  seat_id           Int
+  status            String
+  expires_at        DateTime
+  created_at        DateTime      @default(now())
+  user              User          @relation(fields: [user_id], references: [id])
+  concertDetail     ConcertDetail @relation(fields: [concert_detail_id], references: [id])
+  seat              Seat          @relation(fields: [seat_id], references: [id])
+  payment           Payment?
+}
+
+model Payment {
+  id             Int         @id @default(autoincrement())
+  reservation_id Int         @unique
+  amount         Float
+  status         String
+  created_at     DateTime    @default(now())
+  reservation    Reservation @relation(fields: [reservation_id], references: [id])
+}
+
+model QueueItem {
+  id        Int      @id @default(autoincrement())
+  user_id   Int      @unique
+  processed Boolean  @default(false)
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [user_id], references: [id])
+}
+
+model TicketSession {
+  id               Int      @id @default(autoincrement())
+  user_id          Int      @unique
+  payment_due_at   DateTime
+  ticket_viewed_at DateTime
+  status           String
+  user             User     @relation(fields: [user_id], references: [id])
+}
+
+model QueueToken {
+  id           Int       @id @default(autoincrement())
+  user_id      Int
+  token        String    @unique
+  status       String
+  created_at   DateTime  @default(now())
+  activated_at DateTime?
+  expires_at   DateTime
+  user         User      @relation(fields: [user_id], references: [id])
+}
