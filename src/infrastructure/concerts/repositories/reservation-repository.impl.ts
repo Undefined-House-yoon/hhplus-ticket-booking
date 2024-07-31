@@ -10,28 +10,15 @@ export class ReservationRepositoryImpl implements ReservationRepository {
   constructor(private prisma: PrismaService) {
   }
 
-  async findAvailableDates(): Promise<Date[]> {
-    const dates = await this.prisma.concertDetail.findMany({
-      where: {
-        date: { gte: new Date() },
-        seats: { some: { status: 'AVAILABLE' } },
+  async findById(id: number): Promise<Reservation | null> {
+    const reservation = await this.prisma.reservation.findUnique({
+      where: { id },
+      include: {
+        seat: true,
+        concertDetail: true,
       },
-      select: { date: true },
-      distinct: ['date'],
-      orderBy: { date: 'asc' },
     });
-    return dates.map(d => d.date);
-  }
-
-  async findAvailableSeats(concertDetailId: number): Promise<number[]> {
-    const seats = await this.prisma.seat.findMany({
-      where: {
-        concert_detail_id: concertDetailId,
-        status: 'AVAILABLE',
-      },
-      select: { seat_number: true },
-    });
-    return seats.map(s => s.seat_number);
+    return reservation ? ReservationMapper.toDomain(reservation) : null;
   }
 
   async save(reservation: Reservation): Promise<Reservation> {
@@ -60,16 +47,6 @@ export class ReservationRepositoryImpl implements ReservationRepository {
     return ReservationMapper.toDomain(saved);
   }
 
-  async findById(id: number): Promise<Reservation | null> {
-    const reservation = await this.prisma.reservation.findUnique({
-      where: { id },
-      include: {
-        seat: true,
-        concertDetail: true,
-      },
-    });
-    return reservation ?  ReservationMapper.toDomain(reservation): null;
-  }
 
   async findByUserId(userId: number): Promise<Reservation[]> {
     const reservations = await this.prisma.reservation.findMany({
@@ -83,36 +60,11 @@ export class ReservationRepositoryImpl implements ReservationRepository {
     return ReservationMapper.toDomainList(reservations);
   }
 
-  async findByConcertDetailId(concertDetailId: number): Promise<Reservation[]> {
-    const reservations = await this.prisma.reservation.findMany({
-      where: { concert_detail_id: concertDetailId },
-      include: {
-        seat: true,
-        concertDetail: true,
-      },
-    });
-    return ReservationMapper.toDomainList(reservations);
-  }
 
-  async findConcertDetailIdByDate(date: Date): Promise<number | null> {
-    const concertDetail = await this.prisma.concertDetail.findFirst({
-      where: { date },
-      select: { id: true },
-    });
-    return concertDetail?.id || null;
-  }
-  // todo:SeatStatus 구현 필요
-  async updateSeatStatus(seatId: number, status:string): Promise<void> {
-    await this.prisma.seat.update({
-      where: { id: seatId },
-      data: { status: status.toString() },
-    });
-  }
-
-  async cancelReservation(id: number): Promise<Reservation> {
+  async cancelReservation(reservationId: number): Promise<Reservation> {
     const canceled = await this.prisma.reservation.update({
-      where: { id },
-      data: { status: 'CANCELLED' },
+      where: { id: reservationId },
+      data: { status: ReservationStatus.CANCELLED },
       include: {
         seat: true,
         concertDetail: true,
@@ -122,17 +74,17 @@ export class ReservationRepositoryImpl implements ReservationRepository {
   }
 
   async findActiveReservations(): Promise<Reservation[]> {
-    const activeReservations = await this.prisma.reservation.findMany({
+    const reservations = await this.prisma.reservation.findMany({
       where: {
-        status: 'ACTIVE',
-        expires_at: { gt: new Date() },
-      },
-      include: {
+        status: {
+          notIn: [ReservationStatus.EXPIRED, ReservationStatus.CANCELLED],
+        },
+      }, include: {
         seat: true,
         concertDetail: true,
       },
     });
-    return ReservationMapper.toDomainList(activeReservations);
+    return ReservationMapper.toDomainList(reservations);
   }
 
   async countReservationsByConcertDetail(concertDetailId: number): Promise<number> {
@@ -140,4 +92,17 @@ export class ReservationRepositoryImpl implements ReservationRepository {
       where: { concert_detail_id: concertDetailId },
     });
   }
+
+  async updateReservationStatus(reservations: Reservation[]): Promise<void> {
+    this.prisma.reservation.updateMany({ data: reservations });
+  }
+
+  async updateReservation(reservationId: number): Promise<Reservation> {
+    const updatedReservation = this.prisma.reservation.update({
+      where: { id: reservationId }, data: { status : ReservationStatus.CONFIRMED},
+    });
+    return ReservationMapper.toDomain(updatedReservation);
+  }
+
+
 }

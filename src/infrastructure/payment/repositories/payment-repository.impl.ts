@@ -56,6 +56,7 @@ export class PaymentRepositoryImpl implements PaymentRepository {
     const payments = await this.prisma.payment.findMany({ where: { reservation: { user_id: userId } } });
     return payments.map((value, index) => PaymentMapper.toDomain(value));
   }
+
 }
 
 

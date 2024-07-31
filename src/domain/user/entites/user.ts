@@ -44,3 +44,4 @@ export class User {
     return new User({ id:id, balance:balance });
   }
 }
+

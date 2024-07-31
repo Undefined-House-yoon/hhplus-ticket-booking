@@ -4,6 +4,7 @@ import { TicketSessionService } from '../../../domain/auth/services/ticket-sessi
 import { TokenService } from '../../../domain/auth/services/token.service';
 import { Injectable } from '@nestjs/common';
 import { Reservation } from '../../../domain/concerts/entities/reservation';
+import { CreateReservationDto } from '../../../api/concerts/dto/create-reservation-date.dto';
 
 /**
  * 좌석 예약 요청 Use Case
@@ -25,10 +26,10 @@ export class SeatReservationUseCase {
    * @returns 예약 ID 및 만료 시간
    * @throws 유저 또는 좌석을 찾을 수 없는 경우 에러 발생
    */
-  async reserveSeat(date: string, seatNumber: number, token: string): Promise<{ reservation: Reservation; expiresIn: string }> {
+  async reserveSeat(date: Date, seatNumber: number, token: string): Promise<{ reservation: Reservation; expiresIn: string }> {
     const decodedToken = this.tokenService.verifyToken(token);
     const user = await this.userService.findById(decodedToken.userId);
-    const reservation = await this.reservationService.createReservation({ userId:user.id, date:date, seatNumber:seatNumber, token:token });
+    const reservation = await this.reservationService.createReservation({ userId:user.id, date:date, seatNumber:seatNumber, token:token } as CreateReservationDto);
     const ticketSession = await this.ticketSessionService.addSession(user.id)
     return {
       reservation: reservation,

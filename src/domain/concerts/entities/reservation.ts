@@ -6,7 +6,7 @@ export enum ReservationStatus {
 }
 
 export class Reservation {
-  readonly id: number;
+  readonly id?: number;
   private _status: ReservationStatus; //예약상태
   readonly expiresAt: Date;//예약 날짝
   readonly userId: number;
@@ -17,7 +17,7 @@ export class Reservation {
 
   // 객체 생성을 위한 static 메서드
   static create(params: {
-    id: number,
+    id?: number,
     userId: number,
     seatNumber: number,
     concertDate: Date,
@@ -88,7 +88,7 @@ export class Reservation {
                         seatId,
                         concertDetailId,
                       }: {
-    id: number;
+    id?: number;
     userId: number;
     seatNumber: number;
     concertDate: Date;

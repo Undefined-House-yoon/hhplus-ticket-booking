@@ -3,14 +3,16 @@ import { Body, Controller, Delete, Get, Param, Post, Req, UseGuards } from '@nes
 import { AuthGuard } from '@nestjs/passport';
 import { CreateReservationDto } from './dto/create-reservation-date.dto';
 import { ReservationUseCase } from '../../application/concerts/use-cases/reservation.use-case';
-import { RefundResponseDto } from './dto/refund-response.dto';
-import { RefundRequestDto } from './dto/refund-request.dto';
+import { RetrievalReservationUseCase } from '../../application/concerts/use-cases/retrieval-reservation.use-case';
 
 
 @ApiTags('Reservations')
-@Controller('concerts/reservations')
+@Controller('reservations')
 export class ReservationController {
-  constructor(private readonly reservationUseCase: ReservationUseCase) {
+  constructor(
+    private readonly reservationUseCase: ReservationUseCase,
+    private readonly retrievalReservationUseCase: RetrievalReservationUseCase,
+  ) {
   }
 
 
@@ -21,7 +23,7 @@ export class ReservationController {
   @ApiResponse({ status: 201, description: '예약이 성공적으로 생성되었습니다.' })
   @ApiResponse({ status: 400, description: '잘못된 요청 - 유효하지 않은 입력' })
   @ApiResponse({ status: 401, description: '인증되지 않은 요청' })
-  @ApiResponse({ status: 409, description: '이미 예약된 좌석입니다.' })
+  @ApiResponse({ status: 409, description: '이미 예약된 좌석입니다.' })//{ "reservationId": "PK", "expiresIn": "5m" }
   async createReservation(@Req() req, @Body() createReservationDto: CreateReservationDto) {
     createReservationDto.userId = req.user.id; // JWT에서 사용자 ID를 가져옵니다.
     return this.reservationUseCase.createReservation(createReservationDto);
@@ -34,7 +36,7 @@ export class ReservationController {
   @ApiResponse({ status: 200, description: '사용자의 예약 목록을 반환합니다.' })
   @ApiResponse({ status: 401, description: '인증되지 않은 요청' })
   async getUserReservations(@Req() req) {
-    return this.reservationUseCase.getUserReservations(req.user.id);
+    return this.retrievalReservationUseCase.getUserReservations(req.user.id);
   }
 
   @Get(':id')
@@ -47,7 +49,7 @@ export class ReservationController {
   @ApiResponse({ status: 404, description: '예약을 찾을 수 없음' })
   @ApiParam({ name: 'id', type: Number, description: '조회할 예약 ID' })
   async getReservationDetails(@Req() req, @Param('id') id: number) {
-    return this.reservationUseCase.getReservationDetails(id, req.user.id);
+    return this.retrievalReservationUseCase.getReservationDetails(id, req.user.id);
   }
 
   @Delete(':id')
@@ -63,10 +65,5 @@ export class ReservationController {
     return this.reservationUseCase.cancelReservation(id, req.user.id);
   }
 
-  @UseGuards(AuthGuard('jwt'))
-  @Post('refunds')
-  processRefund(@Body() refundRequestDto: RefundRequestDto): Promise<RefundResponseDto> {
-    // 환불 처리 로직
-    return ;
-  }
+
 }

@@ -8,10 +8,6 @@ export class ChargeBalanceDto {
   amount: number;
 }
 
-export class GetBalanceDto {
-  @ApiProperty()
-  userId: number;
-}
 
 export class BalanceResponseDto {
   @ApiProperty()

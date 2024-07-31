@@ -22,7 +22,6 @@ export class AuthController {
    * 유저 토큰 발급 API
    * @route POST /token
    * @param {CreateTokenDto} createTokenDto - 유저 ID를 포함한 DTO
-   * @param res
    * @param {string} createTokenDto.userId - 유저 ID
    * @returns {Promise<Object>} 생성된 토큰과 대기열 정보
    */

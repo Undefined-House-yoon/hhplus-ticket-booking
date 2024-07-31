@@ -4,17 +4,18 @@ import { BalanceService } from '../../../domain/balance/services/balance.service
 import { BalanceModule } from '../../../api/balance.module';
 import { UserService } from '../../../domain/user/services/user.service';
 import { User } from '../../../domain/user/entites/user';
+import { ChargeBalanceDto } from '../../../api/balance/dto/balance.dto';
 
 describe('BalanceUseCase', () => {
   let useCase: BalanceUseCase;
   let service: BalanceService;
-  let userService: UserService
+  let userService: UserService;
 
   beforeEach(async () => {
 
 
     const module: TestingModule = await Test.createTestingModule({
-      imports:[BalanceModule],
+      imports: [BalanceModule],
     }).compile();
 
     useCase = module.get<BalanceUseCase>(BalanceUseCase);
@@ -22,14 +23,14 @@ describe('BalanceUseCase', () => {
     userService = module.get<UserService>(UserService);
 
     //기본 유저 생성
-    await userService.createUser(User.create({id:1,balance:1}));
+    await userService.createUser(User.create({ id: 1, balance: 1 }));
   });
 
 
   describe('chargeBalance', () => {
     it('[should]  잔액을 충전, 반환해야 합니다.', async () => {
-      jest.spyOn(service,'chargeBalance')
-      const result = await useCase.chargeBalance(1, 10000);
+      jest.spyOn(service, 'chargeBalance');
+      const result = await useCase.chargeBalance({ userId: 1, amount: 10000 });
 
       expect(service.chargeBalance).toHaveBeenCalledWith(1, 10000);
       expect(result).toEqual({ balance: 10000 });
@@ -37,19 +38,21 @@ describe('BalanceUseCase', () => {
     it('[should] 잘못된 사용자 ID로 충전 시 에러를 던져야 합니다.', async () => {
       jest.spyOn(service, 'chargeBalance');
 
-      await expect(useCase.chargeBalance(999, 10000)).rejects.toThrow('User not found');
+      await expect(useCase.chargeBalance({ userId: 999, amount: 10000 })).rejects.toThrow('User not found');
       expect(service.chargeBalance).toHaveBeenCalledWith(999, 10000);
 
     });
 
     it('[should] 음수 금액 충전 시 에러를 던져야 합니다.', async () => {
-      await expect(useCase.chargeBalance(1, -1000)).rejects.toThrow('Invalid amount');
+      await expect(useCase.chargeBalance({
+        userId: 1, amount: -1000,
+      })).rejects.toThrow('Invalid amount');
     });
   });
 
   describe('getBalance', () => {
     it('[should]현재 잔액 반환', async () => {
-      await useCase.chargeBalance(1, 15000);
+      await useCase.chargeBalance({ userId: 1, amount: 15000 });
       jest.spyOn(service, 'getBalance');
       const result = await useCase.getBalance(1);
 

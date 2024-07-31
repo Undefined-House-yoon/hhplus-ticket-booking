@@ -1,11 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { PaymentUseCase } from './payment.use-case';
+import { RefundPaymentUseCase } from './refund-payment-use-case.service';
 import { PaymentService } from '../../../domain/balance/services/payment.service';
 import { Payment, PaymentStatus } from '../../../domain/balance/entities/payment';
 import { ProcessPaymentDto } from '../../../api/balance/dto/payment.dto';
 
 describe('PaymentUseCase', () => {
-  let useCase: PaymentUseCase;
+  let useCase: RefundPaymentUseCase;
   let serviceMock: jest.Mocked<PaymentService>;
 
   beforeEach(async () => {
@@ -15,7 +15,7 @@ describe('PaymentUseCase', () => {
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        PaymentUseCase,
+        RefundPaymentUseCase,
         {
           provide: PaymentService,
           useFactory: serviceMockFactory,
@@ -23,7 +23,7 @@ describe('PaymentUseCase', () => {
       ],
     }).compile();
 
-    useCase = module.get<PaymentUseCase>(PaymentUseCase);
+    useCase = module.get<RefundPaymentUseCase>(RefundPaymentUseCase);
     serviceMock = module.get(PaymentService);
   });
 

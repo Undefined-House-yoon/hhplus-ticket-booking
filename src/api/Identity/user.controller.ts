@@ -32,9 +32,9 @@ export class UserController {
 
   @UseGuards(AuthGuard('jwt'))
   @Get()
-  getUserInfo(@Query('userId') userId: string): Promise<User> {
+  getUserInfo(@Query('userId') userId: string): string{
     // 유저 정보 조회 로직
-    return;
+    return "asdfasdf";
   }
 
 }

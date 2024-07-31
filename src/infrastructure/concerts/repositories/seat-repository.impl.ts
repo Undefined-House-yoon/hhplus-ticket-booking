@@ -17,7 +17,7 @@ export class SeatRepositoryImpl implements SeatRepository {
     return SeatMapper.toDomainList(seatsData);
   }
 
-  async save(seat: Seat): Promise<Seat> {
+  async updateStatus(seat: Seat): Promise<Seat> {
     const updatedSeatData = await this.prisma.seat.update({
       where: { id: seat.id },
       data: {
@@ -26,4 +26,9 @@ export class SeatRepositoryImpl implements SeatRepository {
     });
     return SeatMapper.toDomain(updatedSeatData);
   }
+
+
+  // async getAvailableSeats(date: string): Promise<number[]> {
+  //   return this.reservationService.getAvailableSeats(new Date(date));
+  // }
 }

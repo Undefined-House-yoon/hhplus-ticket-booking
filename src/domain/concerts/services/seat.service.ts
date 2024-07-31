@@ -1,6 +1,8 @@
 import { Seat, SeatStatus } from '../entities/seat';
 import { SeatRepository } from '../repositories/seat.repository';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class SeatService {
 
   constructor(private seatRepository: SeatRepository) {}
@@ -16,7 +18,7 @@ export class SeatService {
       throw new Error('Seat not found');
     }
     seat.reserve();
-    return this.seatRepository.save(seat);
+    return this.seatRepository.updateStatus(seat);
   }
   /**
    * 주어진 좌석을 점유합니다.
@@ -30,7 +32,7 @@ export class SeatService {
       throw new Error('Seat not found');
     }
     seat.occupy();
-    return this.seatRepository.save(seat);
+    return this.seatRepository.updateStatus(seat);
   }
   /**
    * 주어진 좌석을 해제합니다.
@@ -44,7 +46,7 @@ export class SeatService {
       throw new Error('Seat not found');
     }
     seat.release();
-    return this.seatRepository.save(seat);
+    return this.seatRepository.updateStatus(seat);
   }
   /**
    * 주어진 공연 세부 사항 ID에 해당하는 모든 이용 가능한 좌석을 가져옵니다.

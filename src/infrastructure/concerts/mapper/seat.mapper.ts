@@ -7,12 +7,10 @@ export class SeatMapper {
     return Seat.create({
       id: prismaSeat.id,
       concertDetailId: prismaSeat.concert_detail_id,
-      seatNumber:prismaSeat.seat_number,
-      status:mapPrismaSeatToSeatStatus( prismaSeat.status),
+      seatNumber: prismaSeat.seat_number,
+      status: mapPrismaSeatToSeatStatus(prismaSeat.status),
     });
   }
 
-  static toDomainList(prismaSeats: any[]): Seat[] {
-    return prismaSeats.map(this.toDomain);
-  }
+  static toDomainList = (prismaSeats: any[]): Seat[] => prismaSeats.map(this.toDomain);
 }

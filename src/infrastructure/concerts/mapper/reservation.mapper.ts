@@ -10,7 +10,7 @@ export class ReservationMapper {
       status: prismaReservation.status as ReservationStatus,
       expiresAt: prismaReservation.expires_at,
       seatId: prismaReservation.seat_id,
-      concertDetailId: prismaReservation.concert_detail_id
+      concertDetailId: prismaReservation.concert_detail_id,
     });
   }
 
@@ -21,11 +21,9 @@ export class ReservationMapper {
       concert_detail_id: reservation.concertDetailId,
       seat_id: reservation.seatId,
       status: reservation.status,
-      expires_at: reservation.expiresAt
+      expires_at: reservation.expiresAt,
     };
   }
 
-  static toDomainList(prismaReservations: any[]): Reservation[] {
-    return prismaReservations.map(this.toDomain);
-  }
+  static toDomainList = (prismaReservations: any[]): Reservation[] => prismaReservations.map(this.toDomain);
 }

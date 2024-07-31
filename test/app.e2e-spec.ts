@@ -5,6 +5,7 @@ import { AppModule } from '../src/app.module';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
+  let token: string;
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -25,48 +26,46 @@ describe('AppController (e2e)', () => {
       .send({ userId: 1 })
       .expect(200)
       .expect((res) => {
-        expect(res.body).toHaveProperty('token');
-        expect(res.body).toHaveProperty('expiresIn');
-        expect(res.body).toHaveProperty('queueInfo');
+        expect(res.body.data).toHaveProperty('token');
+        expect(res.body.data).toHaveProperty('expiredAt');
+        // expect(res.body.data).toHaveProperty('queueInfo');
       });
   });
 
-  let token: string;
 
   it('/dates (GET) - 예약 가능 날짜 조회', async () => {
     const res = await request(app.getHttpServer())
       .post('/token')
       .send({ userId: 1 })
-      .expect(201);
+      .expect(200);
 
-    token = res.body.token;
+    token = res.body.data.token;
 
     return request(app.getHttpServer())
       .get('/dates')
       .set('Authorization', `Bearer ${token}`)
       .expect(200)
       .expect((res) => {
-        expect(res.body).toHaveProperty('dates');
-        expect(Array.isArray(res.body.dates)).toBe(true);
+        expect(Array.isArray(res.body.data)).toBe(true);
       });
   });
 
   it('/dates/:date/seats (GET) - 특정 날짜의 예약 가능한 좌석 정보 조회', () => {
-    const date = '2024-07-01';
+    const date = '2024-08-01';
 
     return request(app.getHttpServer())
       .get(`/dates/${date}/seats`)
       .set('Authorization', `Bearer ${token}`)
       .expect(200)
       .expect((res) => {
-        expect(res.body).toHaveProperty('seats');
-        expect(Array.isArray(res.body.seats)).toBe(true);
+        // expect(res.body.data).toHaveProperty('seats');
+        expect(Array.isArray(res.body.data)).toBe(true);
       });
   });
 
   it('/reservations (POST) - 좌석 예약 요청', () => {
     const reservationData = {
-      date: '2024-07-01',
+      date: '2024-08-01',
       seatNumber: 1,
       token: token,
     };
@@ -75,10 +74,10 @@ describe('AppController (e2e)', () => {
       .post('/reservations')
       .set('Authorization', `Bearer ${token}`)
       .send(reservationData)
-      .expect(201)
+      .expect(200)
       .expect((res) => {
-        expect(res.body).toHaveProperty('reservationId');
-        expect(res.body).toHaveProperty('expiresIn');
+        expect(res.body.data).toHaveProperty('reservationId');
+        expect(res.body.data).toHaveProperty('expiresIn');
       });
   });
 

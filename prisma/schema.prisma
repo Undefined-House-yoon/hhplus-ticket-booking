@@ -55,6 +55,13 @@ model Seat {
   reservations      Reservation[]
 }
 
+// model SeatCoordinate {
+//   id          Int  @id @default(autoincrement())
+//   seat_number Int
+//   seat_id     Int
+//   seat        Seat @relation(fields: [seat_id], references: [id])
+// }
+
 model Reservation {
   id                Int           @id @default(autoincrement())
   user_id           Int
