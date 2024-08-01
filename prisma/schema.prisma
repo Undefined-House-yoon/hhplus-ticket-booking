@@ -108,7 +108,7 @@ model QueueToken {
   token        String    @unique
   status       String
   created_at   DateTime  @default(now())
-  activated_at DateTime?
+  activated_at DateTime  @updatedAt
   expires_at   DateTime
   user         User      @relation(fields: [user_id], references: [id])
 }

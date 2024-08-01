@@ -8,9 +8,22 @@ import { ConcertModule } from './api/concert.module';
 import { PrismaModule } from './api/prisma.module';
 import { AuthConfigModule } from './api/auth-config.module';
 import { ReservationModule } from './api/reservation.module';
+import { BullModule } from '@nestjs/bull';
+import { QueueModule } from './queue/queue.module';
 
 @Module({
-  imports: [BalanceModule, PrismaModule,IdentityModule,ConcertModule,AuthConfigModule,ReservationModule],
+  imports: [ BullModule.forRoot({
+    redis: {
+      host: 'localhost',
+      port: 6379,
+    },
+  }),BullModule.registerQueue({
+    name: 'task-queue',
+    defaultJobOptions: {
+      removeOnComplete: true,
+      removeOnFail: true,
+    },
+  }),BalanceModule, PrismaModule,IdentityModule,ConcertModule,AuthConfigModule,ReservationModule, QueueModule],
   providers: [ {
     provide: APP_INTERCEPTOR,
     useClass: CombinedApiLoggerInterceptor,

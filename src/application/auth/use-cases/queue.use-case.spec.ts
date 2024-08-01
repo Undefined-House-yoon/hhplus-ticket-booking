@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { QueueUseCase } from './queue.use-case';
 import { QueueService } from '../../../domain/auth/services/queue.service';
 import { IdentityModule } from '../../../api/identityModule';
+import { PrismaModule } from '../../../api/prisma.module';
 
 describe('QueueUseCase', () => {
   let useCase: QueueUseCase;
@@ -9,7 +10,7 @@ describe('QueueUseCase', () => {
   beforeEach(async () => {
 
     const module: TestingModule = await Test.createTestingModule({
-      imports: [IdentityModule],
+      imports: [IdentityModule,PrismaModule],
     }).compile();
 
     useCase = module.get<QueueUseCase>(QueueUseCase);
