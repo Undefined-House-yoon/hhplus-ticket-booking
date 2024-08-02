@@ -1,9 +1,10 @@
 import { ApiBearerAuth, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Body, Controller, Delete, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { CreateReservationDto } from './dto/create-reservation-date.dto';
+import { CreateReservationDto } from '../concerts/dto/create-reservation-date.dto';
 import { ReservationUseCase } from '../../application/concerts/use-cases/reservation.use-case';
 import { RetrievalReservationUseCase } from '../../application/concerts/use-cases/retrieval-reservation.use-case';
+import { CacheKey } from '@nestjs/common/cache';
 
 
 @ApiTags('Reservations')
@@ -42,6 +43,7 @@ export class ReservationController {
   @Get(':id')
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth()
+  @CacheKey('available-dates')
   @ApiOperation({ summary: '특정 예약 상세 정보 조회' })
   @ApiResponse({ status: 200, description: '예약 상세 정보를 반환합니다.' })
   @ApiResponse({ status: 401, description: '인증되지 않은 요청' })

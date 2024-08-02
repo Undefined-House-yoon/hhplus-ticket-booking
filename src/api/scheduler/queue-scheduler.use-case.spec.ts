@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { QueueUseCase } from '../../application/auth/use-cases/queue.use-case';
 import { QueueService } from '../../domain/auth/services/queue.service';
 import { QueueScheduler } from './queue-scheduler.use-case';
-import { IdentityModule } from '../identityModule';
+import { AuthModule } from '../auth/auth.module';
 
 describe('QueueUseCase', () => {
   let scheduler: QueueScheduler;
@@ -11,7 +11,7 @@ describe('QueueUseCase', () => {
   beforeEach(async () => {
 
     const module: TestingModule = await Test.createTestingModule({
-      imports: [IdentityModule],
+      imports: [AuthModule],
     }).compile();
 
     scheduler = module.get<QueueScheduler>(QueueScheduler);

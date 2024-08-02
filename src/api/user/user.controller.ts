@@ -1,14 +1,14 @@
 import { Body, Controller, Get, Inject, Param, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { UserUseCase } from '../../application/auth/use-cases/user.use-case';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from '../../domain/user/entites/user';
 import { AuthGuard } from '@nestjs/passport';
+import { CreateUserUseCase } from '../../application/auth/use-cases/create-user.use-case';
 
 @Controller('users')
 export class UserController {
 
-  constructor(@Inject(UserUseCase)private readonly userUseCase: UserUseCase) {
+  constructor(@Inject(CreateUserUseCase)private readonly userUseCase: CreateUserUseCase) {
   }
 
   /**
@@ -27,7 +27,7 @@ export class UserController {
   })
   @ApiBody({ type: CreateUserDto })
   createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
-    return this.userUseCase.create(createUserDto);
+    return this.userUseCase.execute(createUserDto);
   }
 
   @UseGuards(AuthGuard('jwt'))

@@ -6,7 +6,7 @@ import { TokenRepository } from '../../../domain/auth/repositories/token.reposit
 import { UserService } from '../../../domain/user/services/user.service';
 import { User } from '../../../domain/user/entites/user';
 import { IdentityModule } from '../../../api/identityModule';
-import { CreateTokenDto } from '../../../api/Identity/dto/create-token.dto';
+import { CreateTokenDto } from '../../../api/auth/dto/create-token.dto';
 
 
 describe('GetTokenUseCase', () => {

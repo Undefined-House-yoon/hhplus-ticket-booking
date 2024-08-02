@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { UserRepository } from '../../user/repositories/user.repository';
+import { ErrorHandler } from '../../../exceptions/exception';
 
 @Injectable()
 export class BalanceService {
@@ -8,11 +9,11 @@ export class BalanceService {
   async chargeBalance(userId: number, amount: number): Promise<number> {
     const user = await this.userRepository.findById(userId);
     if (!user) {
-      throw new Error('User not found');
+      throw ErrorHandler.notFound('User not found',{ cause: 'User does not exist in the database' });
     }
 
     if (amount < 0 && Math.abs(amount) > user.balance) {
-      throw new Error('Invalid amount');
+      throw ErrorHandler.badRequest('Invalid amount',{ cause: 'Insufficient balance' });
     }
 
     user.deposit(amount);
@@ -24,7 +25,7 @@ export class BalanceService {
   async getBalance(userId: number): Promise<number> {
     const user = await this.userRepository.findById(userId);
     if (!user) {
-      throw new Error('User not found');
+      throw ErrorHandler.notFound('user not found',{ cause: 'User does not exist in the database' });
     }
     return user.balance;
   }

@@ -4,7 +4,7 @@ import { SeatService } from '../../../domain/concerts/services/seat.service';
 import { ReservationService } from '../../../domain/concerts/services/reservation.service';
 import { PaymentService } from '../../../domain/balance/services/payment.service';
 import { Payment, PaymentStatus } from '../../../domain/balance/entities/payment';
-import { ProcessPaymentDto } from '../../../api/balance/dto/payment.dto';
+import { ProcessPaymentDto } from '../../../api/payment/dto/payment.dto';
 
 @Injectable()
 export class ReserveAndPayUseCase {

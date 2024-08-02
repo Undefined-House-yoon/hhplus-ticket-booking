@@ -53,12 +53,12 @@ describe('Token', () => {
     const currentTime = new Date();
 
     // entryTime이 현재 시간과 거의 같아야 합니다 (약간의 오차 허용).
-    expect(tokenInstance.entryTime.getTime()).toBeCloseTo(currentTime.getTime(), -2);
+    expect(tokenInstance.createdAt.getTime()).toBeCloseTo(currentTime.getTime(), -2);
   });
 
   test('[should] expiredAt이 entryTime 이후의 시간으로 설정되어야 합니다.', () => {
     const userId = 1;
     const tokenInstance = Token.create({ userId });
-    expect(tokenInstance.expiredAt.getTime()).toBeGreaterThan(tokenInstance.entryTime.getTime());
+    expect(tokenInstance.expiredAt.getTime()).toBeGreaterThan(tokenInstance.createdAt.getTime());
   });
 });

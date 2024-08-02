@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PaymentService } from '../../../domain/balance/services/payment.service';
-import { RefundRequestDto } from '../../../api/balance/dto/refund-request.dto';
-import { RefundResponseDto } from '../../../api/balance/dto/refund-response.dto';
+import { RefundRequestDto } from '../../../api/payment/dto/refund-request.dto';
+import { RefundResponseDto } from '../../../api/payment/dto/refund-response.dto';
 
 @Injectable()
 export class RefundPaymentUseCase {

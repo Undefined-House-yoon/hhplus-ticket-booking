@@ -3,9 +3,9 @@ import { UserRepository } from '../../user/repositories/user.repository';
 import { ReservationRepository } from '../../concerts/repositories/reservation.repository';
 import { Payment, PaymentStatus } from '../entities/payment';
 import { PaymentRepository } from '../repositories/payment.repositoy';
-import { ProcessPaymentDto } from '../../../api/balance/dto/payment.dto';
-import { RefundRequestDto } from '../../../api/balance/dto/refund-request.dto';
-import { RefundResponseDto } from '../../../api/balance/dto/refund-response.dto';
+import { ProcessPaymentDto } from '../../../api/payment/dto/payment.dto';
+import { RefundRequestDto } from '../../../api/payment/dto/refund-request.dto';
+import { RefundResponseDto } from '../../../api/payment/dto/refund-response.dto';
 import { ReservationStatus } from '../../concerts/entities/reservation';
 
 @Injectable()

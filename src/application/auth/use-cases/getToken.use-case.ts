@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { TokenService } from '../../../domain/auth/services/token.service';
 import { Token } from '../../../domain/auth/entities/token';
 import { UserService } from '../../../domain/user/services/user.service';
-import { CreateTokenDto } from '../../../api/Identity/dto/create-token.dto';
+import { CreateTokenDto } from '../../../api/auth/dto/create-token.dto';
 
 @Injectable()
 export class GetTokenUseCase {

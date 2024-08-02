@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Token } from '../entities/token';
 import { TokenRepository } from '../repositories/token.repository';
-import { CreateTokenDto } from '../../../api/Identity/dto/create-token.dto';
+import { CreateTokenDto } from '../../../api/auth/dto/create-token.dto';
 import * as jwt from 'jsonwebtoken';
 
 @Injectable()
