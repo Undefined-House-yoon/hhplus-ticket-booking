@@ -1,37 +1,81 @@
-#### 초안
-1. **API 명세 작성**
-    - **유저 토큰 발급 API**
-        - Endpoint: `POST /token`
-        - Request: `{ "userId": "PK" }`
-        - Response: `{ "token": "JWT", "queueInfo": { "position": 1, "waitTime": "5m" } }`
-        - Authorization: 없음
-        - 기능 : 유저의 PK 와 대기열 정보를 포함한 토큰 발급
-    - **예약 가능 날짜 / 좌석 API**
-        - Endpoint: `GET /dates`
-        - Response: `{ "dates": ["2024-07-01", "2024-07-02", ...] }`
-        - Endpoint: `GET /dates/:date/seats`
-        - Response: `{ "seats": [1, 2, 3, ..., 50] }`
-        - Authorization: 필요
-        - 기능 : 예약 가능한 날짜 목록과 해당 날짜의 좌석 정보 조회
-    - **좌석 예약 요청 API**
-        - Endpoint: `POST /reservations`
-        - Request: `{ "date": "2024-07-01", "seatNumber": 1, "token": "JWT" }`
-        - Response: `{ "reservationId": "PK", "expiresIn": "5m" }`
-        - Authorization: 필요
-        - 기능 : 날짜와 좌석 정보를 입력받아 좌석 예약, 임시 배정 및 시간 내 결제 관리
-    - **잔액 충전 / 조회 API**
-        - Endpoint: `POST /balance`
-        - Request: `{ "userId": "PK", "amount": 10000 }`
-        - Response: `{ "balance": 20000 }`
-        - Authorization: 필요
-        - Endpoint: `GET /balance`
-        - Request: `{ "userId": "PK" }`
-        - Response: `{ "balance": 20000 }`
-        - Authorization: 필요
-        - 기능 : 유저의 잔액 충전 및 조회
-    - **결제 API**
-        - Endpoint: `POST /payment`
-        - Request: `{ "reservationId": "PK", "userId": "PK", "amount": 10000 }`
-        - Response: `{ "status": "success", "transactionId": "PK" }`
-        - Authorization: 필요
-        - 기능 : 결제 처리 및 결제 내역 생성, 좌석 소유권 배정, 대기열 토큰 만료
+1. **유저 토큰 발급 API**
+   - **Endpoint**: `POST /token`
+     - **Request**: `{ "userId": "PK" }`
+     - **Response**: `{ "token": "JWT", "expiresIn": "1h", "queueInfo": { "position": 1, "waitTime": "5m" } }`
+     - **Authorization**: 없음
+     - **기능**: 유저의 PK와 대기열 정보를 포함한 토큰 발급
+
+2. **예약 가능 날짜 / 좌석 API**
+   - **Endpoint**: `GET /dates`
+      - **Response**: `{ "dates": ["2024-07-01", "2024-07-02", ...] }`
+      - **Authorization**: 필요
+      - **기능**: 예약 가능한 날짜 목록 조회 0
+   - **Endpoint**: `GET /dates/:concertDetailId`
+      - **Response**: `{ "seats": [1, 2, 3, ..., 50] }`
+      - **Authorization**: 필요
+      - **기능**: 콘서트 예약 가능한 좌석 정보 조회
+
+3. **좌석 예약 요청 API**
+   - **Endpoint**: `POST /reservations`
+     - **Request**: `{ "concertDetailId": PK, "seatNumber": 1, "token": "JWT" }`
+     - **Response**:
+        - 성공: `{ "reservation": /* 예약 내역 */, "expiresIn": "5m" }`
+        - 에러: `{ "error": "Seat is not available" }`, `{ "error": "Insufficient balance" }`
+     - **Authorization**: 필요
+     - **기능**: 콘서트 정보와 좌석 정보를 입력받아 좌석 예약, 임시 배정 및 시간 내 결제 관리
+
+4. **유저 예약 목록 조회 API**
+    - **Endpoint**: `GET /reservations`
+      - **Authorization**: 필요
+      - **Request**: 없음
+      - **Response**:
+          - 성공: `{ "reservations": [ /* 예약 목록 */ ] }`
+          - 에러: `{ "error": "Unauthorized request" }`
+      - **기능**: 사용자의 예약 목록을 조회합니다.
+
+5. 특정 예약 상세 정보 조회 API
+   - **Endpoint**: `GET /reservations/:id`
+     - **Authorization**: 필요
+     - **Request**: 없음
+     - **Response**:
+         - 성공: `{ "reservation": { /* 예약 상세 정보 */ } }`
+         - 에러: `{ "error": "Unauthorized request" }`, `{ "error": "Forbidden" }`, `{ "error": "Reservation not found" }`
+     - **기능**: 특정 예약의 상세 정보를 조회합니다.
+
+6. 예약 취소 API
+   - **Endpoint**: `DELETE /reservations/:id`
+     - **Authorization**: 필요
+     - **Request**: 없음
+     - **Response**:
+         - 성공: `{ "message": "Reservation cancelled successfully" }`
+         - 에러: `{ "error": "Unauthorized request" }`, `{ "error": "Forbidden" }`, `{ "error": "Reservation not found" }`
+     - **기능**: 예약을 취소합니다.
+
+7. 환불 처리 API
+   - **Endpoint**: `POST /refunds`
+     - **Authorization**: 필요
+     - **Request**: `{ "reservationId": PK, "reason": "string" }`
+     - **Response**:
+         - 성공: `{ "message": "Refund processed successfully" }`
+         - 에러: `{ "error": "Unauthorized request" }`, `{ "error": "Invalid reservation" }`, `{ "error": "Refund not possible" }`
+     - **기능**: 환불을 처리합니다.
+
+8. **잔액 충전 / 조회 API**
+   - **Endpoint**: `GET /balance`
+     - **Response**: `{ "balance": 20000 }`
+     - **Authorization**: 필요 (JWT 토큰을 통해 사용자 인증)
+     - **기능**: 유저의 잔액 조회
+   - **Endpoint**: `POST /balance`
+      - **Request**: `{ "userId": "PK", "amount": 10000 }`
+      - **Response**: `{ "balance": 20000 }`
+      - **Authorization**: 필요
+      - **기능**: 유저의 잔액 충전
+
+9. **결제 API**
+   - **Endpoint**: `POST /payment`
+     - **Request**: `{ "reservationId": "PK", "userId": "PK", "amount": 10000 }`
+     - **Response**:
+        - 성공: `{ "status": "success", "transactionId": "PK" }`
+        - 에러: `{ "error": "Payment failed" }`
+     - **Authorization**: 필요
+     - **기능**: 결제 처리 및 결제 내역 생성, 좌석 소유권 배정, 대기열 토큰 만료
