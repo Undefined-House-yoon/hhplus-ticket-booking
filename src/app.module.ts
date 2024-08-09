@@ -12,6 +12,8 @@ import { QueueModule } from './queue/queue.module';
 import { RedisCacheModule } from './api/cache.module';
 import { PaymentModule } from './api/payment/payment.module';
 import { AuthModule } from './api/auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [RedisCacheModule,
@@ -27,6 +29,8 @@ import { AuthModule } from './api/auth/auth.module';
       removeOnFail: true,
     },
   }),
+    ScheduleModule.forRoot(),
+    ConfigModule.forRoot({isGlobal:true}),
     AuthModule,
     PaymentModule,
     BalanceModule,

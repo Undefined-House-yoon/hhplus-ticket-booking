@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ConcertsController } from './concerts.controller';
+import { ConcertController } from './concert.controller';
 import { UserModule } from '../user/user.module';
 import {
   GetAllUpcomingConcertsByDateUseCase
@@ -12,13 +12,11 @@ import { SeatModule } from '../seat.module';
 
 @Module({
   imports:[UserModule,SeatModule],
-  controllers: [ConcertsController],
+  controllers: [ConcertController],
   providers: [
-    GetAvailableSeatsUseCase,
-    GetAllUpcomingConcertsByDateUseCase,
+    GetAvailableSeatsUseCase, GetAllUpcomingConcertsByDateUseCase,
     ConcertDetailService,
     { provide: ConcertDetailRepository, useClass: ConcertDetailRepositoryImpl },
   ],
 })
-export class ConcertModule {
-}
+export class ConcertModule {}

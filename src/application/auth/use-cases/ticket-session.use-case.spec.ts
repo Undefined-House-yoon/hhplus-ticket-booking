@@ -1,7 +1,6 @@
 import { TicketSessionUseCase } from './ticket-session.use-case';
 import { TicketSessionService } from '../../../domain/auth/services/ticket-session.service';
 import { Test, TestingModule } from '@nestjs/testing';
-import { IdentityModule } from '../../../api/identityModule';
 import { TicketSession, TicketStatus } from '../../../domain/auth/entities/ticket-session';
 
 describe('TicketSessionUseCase', () => {
@@ -10,7 +9,7 @@ describe('TicketSessionUseCase', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [IdentityModule],
+      imports: [],
     }).compile();
 
     useCase = module.get<TicketSessionUseCase>(TicketSessionUseCase);

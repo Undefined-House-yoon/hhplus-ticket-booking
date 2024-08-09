@@ -10,7 +10,7 @@ import { GetAvailableSeatsUseCase } from '../../application/concerts/use-cases/g
 import { CacheKey, CacheTTL } from '@nestjs/common/cache';
 
 @Controller('dates')
-export class ConcertsController {
+export class ConcertController {
   constructor(
     private readonly getAllUpcomingConcertsByDateUseCase: GetAllUpcomingConcertsByDateUseCase,
     private readonly getAvailableSeatsUseCase: GetAvailableSeatsUseCase,

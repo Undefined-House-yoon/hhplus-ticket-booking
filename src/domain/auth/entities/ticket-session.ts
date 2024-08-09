@@ -1,4 +1,4 @@
-export const enum TicketStatus {
+export enum TicketStatus {
   viewing = "viewing",
   purchased = "purchased",
   expired = "expired",
@@ -32,7 +32,7 @@ export class TicketSession {
     userId: number;
     paymentDueAt?: Date;
     ticketViewedAt?: Date;
-    status?: TicketStatus;
+    status?: string;
     expiredTime?: number;
   }): TicketSession {
     return new TicketSession(params);
@@ -51,15 +51,19 @@ export class TicketSession {
       userId: number;
       paymentDueAt?: Date;
       ticketViewedAt?: Date;
-      status?: TicketStatus;
+      status?: string;
       expiredTime?: number;
     },
   ) {
     const time = expiredTime ?? 15 * 60 * 1000;
+    let state = null;
+    if (status in TicketStatus){
+      state = status as TicketStatus;
+    }
     this.id = id;
     this.userId = userId;
     this.paymentDueAt = paymentDueAt ?? new Date(Date.now() + time);
     this.ticketViewedAt = ticketViewedAt ?? new Date();
-    this._status = status ?? TicketStatus.viewing;
+    this._status = state ?? TicketStatus.viewing;
   }
 }

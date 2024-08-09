@@ -61,4 +61,13 @@ export class TicketSessionRepositoryImpl implements TicketSessionRepository {
     });
     return TicketSessionMapper.toDomainList(results)
   }
+
+  async addSessions(sessions: TicketSession[]): Promise<number> {
+    const result = await this.prisma.ticketSession.createMany({
+      data: TicketSessionMapper.fromDomainList(sessions) ,
+      skipDuplicates: true, // 중복된 항목을 건너뜁니다.
+    });
+    console.log(result)
+    return result.count;
+  }
 }

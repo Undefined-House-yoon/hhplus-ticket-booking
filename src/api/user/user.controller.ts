@@ -1,9 +1,9 @@
 import { Body, Controller, Get, Inject, Param, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CreateUserDto } from './dto/create-user.dto';
-import { User } from '../../domain/user/entites/user';
 import { AuthGuard } from '@nestjs/passport';
 import { CreateUserUseCase } from '../../application/auth/use-cases/create-user.use-case';
+import { ResponseUserDto } from './dto/response-user.dto';
 
 @Controller('users')
 export class UserController {
@@ -21,20 +21,16 @@ export class UserController {
    */
   @Post()
   @ApiOperation({ summary: '유저 생성' })
-  @ApiResponse({
-    status: 201,
-    description: '유저가 생성되었습니다.',
-  })
+  @ApiResponse({status: 201, description: '유저가 생성되었습니다.'})
   @ApiBody({ type: CreateUserDto })
-  createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
+  createUser(@Body() createUserDto: CreateUserDto): Promise<ResponseUserDto> {
     return this.userUseCase.execute(createUserDto);
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Get(':id')
-  getUserInfo(@Param('id') userId: number): string{
+  getUserInfo(@Param('id') userId: number): string {
     // 유저 정보 조회 로직
-    return "asdfasdf";
+    return "userName";
   }
-
 }

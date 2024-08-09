@@ -10,7 +10,16 @@ export abstract class QueueItemRepository {
 
   abstract findUnprocessed(): Promise<QueueItem[]> ;
 
-  abstract updateProcessed(id: number,processed:boolean): Promise<QueueItem> ;
+  abstract updateProcessed(id: number, processed: boolean): Promise<QueueItem> ;
 
   abstract removeExpiredItems(expirationDate: Date): Promise<number> ;
+
+
+  abstract findAfterTime(time: Date): Promise<QueueItem[]> ;
+
+  abstract findByLimitCount(count: number): Promise<QueueItem[]> ;
+
+  abstract activatePendingTokens(ids: number[]): Promise<void> ;
+
+  abstract expireOldTokens(ids: number[]): Promise<void> ;
 }

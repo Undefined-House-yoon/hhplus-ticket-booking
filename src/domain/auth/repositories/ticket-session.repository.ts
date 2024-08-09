@@ -10,4 +10,6 @@ export abstract class TicketSessionRepository {
   abstract update(ticketSession: TicketSession): Promise<TicketSession>;
 
   abstract removeExpired(): Promise<number>;
+
+  abstract addSessions(sessions: TicketSession[]): Promise<number>;
 }

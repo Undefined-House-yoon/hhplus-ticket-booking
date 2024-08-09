@@ -3,6 +3,7 @@ import { PrismaService } from '../../../../prisma/prisma.service';
 import { QueueItem } from '../../../domain/auth/entities/queue-item';
 import { QueueItemRepository } from '../../../domain/auth/repositories/queue-item.repository';
 import { QueueItemMapper } from '../mapper/queue-item.mapper';
+import { ErrorHandler } from '../../../exceptions/exception';
 
 @Injectable()
 export class QueueItemRepositoryImpl implements QueueItemRepository {
@@ -15,12 +16,17 @@ export class QueueItemRepositoryImpl implements QueueItemRepository {
    * @returns 생성된 QueueItem
    */
   async create(userId: number): Promise<QueueItem> {
-    const queueItem = await this.prisma.queueItem.create({
-      data: {
-        user_id: userId,
-      },
-    });
-    return QueueItemMapper.toDomain(queueItem);
+    try {
+      const queueItem = await this.prisma.queueItem.create({
+        data: {
+          user_id: userId,
+        },
+      });
+      console.log(`Created queue item for user ${userId}`);
+      return QueueItemMapper.toDomain(queueItem);
+    } catch (error) {
+      ErrorHandler.badRequest(`Failed to create queue item for user ${userId}:${error.message}`)
+    }
   }
 
   /**
@@ -56,7 +62,8 @@ export class QueueItemRepositoryImpl implements QueueItemRepository {
       where: { processed: false },
       orderBy: { createdAt: 'asc' },
     });
-    return QueueItemMapper.toDomainList(queueItems);
+    if (queueItems)  return QueueItemMapper.toDomainList(queueItems);
+    return [];
   }
 
   /**
@@ -88,5 +95,37 @@ export class QueueItemRepositoryImpl implements QueueItemRepository {
       },
     });
     return count;
+  }
+
+  async findAfterTime(time: Date): Promise<QueueItem[]> {
+    const queueItems = await this.prisma.queueItem.findMany({
+      where: {
+        createdAt: { lt: time },
+        processed: false,
+      },
+    });
+    return queueItems ? QueueItemMapper.toDomainList(queueItems) : [];
+  }
+
+  async findByLimitCount(count: number): Promise<QueueItem[]> {
+    const queueItems = await this.prisma.queueItem.findMany({
+      where: { processed: false },
+      orderBy: { createdAt: 'asc' },
+      take: count,
+    });
+    return queueItems ? QueueItemMapper.toDomainList(queueItems) : [];
+  }
+
+  async activatePendingTokens(ids: number[]): Promise<void> {
+    await this.prisma.queueItem.updateMany({
+      where: { id: { in: ids } },
+      data: { processed: true },
+    });
+  }
+
+  async expireOldTokens(ids: number[]): Promise<void> {
+    await this.prisma.queueItem.deleteMany({
+      where: { id: { in: ids } },
+    });
   }
 }

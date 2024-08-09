@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { QueueItem } from '../entities/queue-item';
 import { QueueItemRepository } from '../repositories/queue-item.repository';
+import { ErrorHandler } from '../../../exceptions/exception';
 
 
 @Injectable()
@@ -9,17 +10,15 @@ export class QueueService {
   }
 
   // 새로운 대기열 항목 추가
-  async addItem(userId: number): Promise<number> {
+  async addItem(userId: number): Promise<QueueItem> {
     const existingItem = await this.queueItemRepository.findByUserId(userId);
-    if (existingItem) throw Error('User already in queue');
-
-    const newItem = await this.queueItemRepository.create(userId);
-    return newItem.id;
+    if (existingItem) throw ErrorHandler.badRequest('User already in queue');
+    return this.queueItemRepository.create(userId);
   }
 
   // 특정 항목의 대기열 위치 반환
   async getItemPosition(itemId: number): Promise<number> {
-    // 전체 대기열 항목 중에서 처리되지 않은 항목들을 필터링
+    // 전체 대기열 항목 중에서 처리되지 않은 항목들을 필터링 날짜순
     const unprocessedItems = await this.queueItemRepository.findUnprocessed();
     // 필터링된 항목들 중에서 해당 항목의 인덱스를 찾음
     const itemIndex = unprocessedItems.findIndex(item => item.id === itemId);
@@ -35,6 +34,7 @@ export class QueueService {
 
   // 큐의 다음 아이템을 처리
   async processNextItem(): Promise<QueueItem | null> {
+    // 전체 대기열 항목 중에서 처리되지 않은 항목들을 필터링 날짜순
     const unprocessedItems = await this.queueItemRepository.findUnprocessed();
     if (unprocessedItems.length == 0) return null;
     const nextItem = unprocessedItems[0];
@@ -46,7 +46,28 @@ export class QueueService {
 
   // 오래된 항목 정리 및 제거된 항목 수 반환
   async removeExpiredItems(): Promise<number> {
-    const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
-    return this.queueItemRepository.removeExpiredItems(oneHourAgo);
+    const fiveMinute = new Date(Date.now() - 5 * 60 * 1000);
+    return this.queueItemRepository.removeExpiredItems(fiveMinute);
+  }
+
+  // 5분 이상 경과한 토큰 조회
+  async getTokensAfter5Minutes(): Promise<QueueItem[]> {
+    const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
+    return this.queueItemRepository.findAfterTime(fiveMinutesAgo);
+  }
+
+  // 활성화할 토큰 리스트 조회
+  async getTokenListToBeActivated(count: number): Promise<QueueItem[]> {
+    return this.queueItemRepository.findByLimitCount(count);
+  }
+
+  // 대기중인 토큰 활성화
+  async activatePendingTokens(ids: number[]): Promise<void> {
+    await this.queueItemRepository.activatePendingTokens(ids);
+  }
+
+  //만료 시킬 토큰
+  async expireOldTokens(ids: number[]): Promise<void> {
+    await this.queueItemRepository.expireOldTokens(ids);
   }
 }

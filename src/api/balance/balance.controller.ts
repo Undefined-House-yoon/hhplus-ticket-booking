@@ -25,7 +25,7 @@ export class BalanceController {
   ) {}
 
   @Get(':id')
-  // @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth()
   @ApiOperation({ summary: '잔액 조회' })
   @ApiParam({ name: 'id', type: String, description: '사용자 ID' })

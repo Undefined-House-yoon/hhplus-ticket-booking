@@ -1,12 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { QueueUseCase } from '../../application/auth/use-cases/queue.use-case';
+import { QueueFacade } from '../../application/auth/use-cases/queue-facade.service';
 import { QueueService } from '../../domain/auth/services/queue.service';
 import { QueueScheduler } from './queue-scheduler.use-case';
 import { AuthModule } from '../auth/auth.module';
 
 describe('QueueUseCase', () => {
   let scheduler: QueueScheduler;
-  let useCase: QueueUseCase;
+  let useCase: QueueFacade;
   let service: QueueService;
   beforeEach(async () => {
 
@@ -15,7 +15,7 @@ describe('QueueUseCase', () => {
     }).compile();
 
     scheduler = module.get<QueueScheduler>(QueueScheduler);
-    useCase = module.get<QueueUseCase>(QueueUseCase);
+    useCase = module.get<QueueFacade>(QueueFacade);
     service = module.get<QueueService>(QueueService);
   });
   it('[should]오래된 큐 아이템들을 정리합니다.', async () => {

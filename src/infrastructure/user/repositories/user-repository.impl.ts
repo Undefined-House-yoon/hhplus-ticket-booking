@@ -33,6 +33,7 @@ export class UserRepositoryImpl implements UserRepository {
         balance: user.balance,
       },
       create: {
+        id: user.id,
         balance: user.balance,
       },
     });

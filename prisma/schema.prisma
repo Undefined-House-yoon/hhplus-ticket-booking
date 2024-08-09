@@ -20,7 +20,6 @@ model User {
   balance       Float
   created_at    DateTime       @default(now())
   reservations  Reservation[]
-  queueTokens   QueueToken[]
   queueItem     QueueItem?
   ticketSession TicketSession?
 }
@@ -102,13 +101,4 @@ model TicketSession {
   user             User     @relation(fields: [user_id], references: [id])
 }
 
-model QueueToken {
-  id           Int       @id @default(autoincrement())
-  user_id      Int
-  token        String    @unique
-  status       String
-  created_at   DateTime  @default(now())
-  activated_at DateTime  @updatedAt
-  expires_at   DateTime
-  user         User      @relation(fields: [user_id], references: [id])
-}
+

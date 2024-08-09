@@ -3,7 +3,6 @@ import { TicketSessionRepository } from '../repositories/ticket-session.reposito
 import { TicketSession } from '../entities/ticket-session';
 
 
-
 @Injectable()
 export class TicketSessionService {
 
@@ -23,10 +22,8 @@ export class TicketSessionService {
    * @returns 찾은 티켓 세션
    * @throws session 을 찾을 수 없는 경우 에러 발생
    */
-  async findSessionByUserId(userId: number): Promise<TicketSession> {
-    const session = await this.ticketSessionRepository.findByUserId(userId);
-    if (session) return session;
-    throw new Error('Session not found')
+  async findSessionByUserId(userId: number): Promise<TicketSession|null> {
+    return this.ticketSessionRepository.findByUserId(userId);
   }
   /**
    * 사용자가 티켓을 구매합니다.
@@ -66,4 +63,22 @@ export class TicketSessionService {
 
     return this.ticketSessionRepository.removeExpired();
   }
+
+  /**
+   * 여러 새로운 세션을 추가합니다.
+   * @param userIds 사용자 ID 배열
+   * @returns 생성된 티켓 세션 수
+   */
+  async addSessions(userIds: number[]): Promise<number> {
+    const sessions = userIds.map((userId)=>TicketSession.create({userId}));
+    console.log("sdfaasdfasd",sessions.length);
+
+    return  this.ticketSessionRepository.addSessions(sessions);
+  }
+
 }
+/*    await this.prisma.queueItem.updateMany({
+      where: { id: { in: ids } },
+      data: { processed: true },
+    });
+  }*/
