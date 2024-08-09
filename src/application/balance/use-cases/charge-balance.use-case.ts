@@ -4,7 +4,7 @@ import { BalanceResponseDto, ChargeBalanceDto } from '../../../api/balance/dto/b
 
 @Injectable()
 export class ChargeBalanceUseCase {
-  constructor(private balanceService: BalanceService) {}
+  constructor(private readonly balanceService: BalanceService) {}
 
   async execute(chargeBalanceDto: ChargeBalanceDto): Promise<BalanceResponseDto> {
     const newBalance = await this.balanceService.chargeBalance(chargeBalanceDto.userId, chargeBalanceDto.amount);

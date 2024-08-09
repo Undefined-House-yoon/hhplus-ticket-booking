@@ -25,7 +25,10 @@ export class QueueFacade {
   async getPosition(userId: number): Promise<{status:boolean , position:number}> {
     // 주어진 사용자 ID에 해당하는 대기열 항목을 조회
     const queueItem = await this.queueService.findQueueItemByUserId(userId);
+    console.log(queueItem);
     if (!queueItem) return {status:false , position:-1};// 대기열에 항목이 없으면 -1 반환
+
+    if (queueItem.isProcessed()) return {status:true , position:-1};// 대기열은 끝
 
     const queueNumber = await this.queueService.getItemPosition(queueItem.id);
     // 항목의 위치를 반환

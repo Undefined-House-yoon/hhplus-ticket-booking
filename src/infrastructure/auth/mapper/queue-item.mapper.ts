@@ -1,12 +1,14 @@
 import { QueueItem } from '../../../domain/auth/entities/queue-item';
 
+import { QueueItem as PrismaQueueItem} from '@prisma/client';
+
 export class QueueItemMapper {
-  static toDomain(prismaQueueItem: any): QueueItem {
+  static toDomain(prismaQueueItem: PrismaQueueItem): QueueItem {
     return QueueItem.create({
       id: prismaQueueItem.id,
       userId: prismaQueueItem.user_id,
       processed: prismaQueueItem.processed,
-      createdAt: prismaQueueItem.created_at
+      createdAt: prismaQueueItem.createdAt
     });
   }
 

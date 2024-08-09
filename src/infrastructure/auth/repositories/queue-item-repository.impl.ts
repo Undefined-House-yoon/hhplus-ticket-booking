@@ -48,7 +48,7 @@ export class QueueItemRepositoryImpl implements QueueItemRepository {
    */
   async findByUserId(userId: number): Promise<QueueItem | null> {
     const queueItem = await this.prisma.queueItem.findFirst({
-      where: { user_id: userId, processed: false },
+      where: { user_id: userId },
     });
     return queueItem?QueueItemMapper.toDomain(queueItem):null;
   }
