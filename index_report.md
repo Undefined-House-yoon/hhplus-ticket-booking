@@ -32,7 +32,7 @@ API 명세서는 아래 링크에서 확인할 수 있습니다:
 각 시나리오에서 발생하는 쿼리의 실행 시간과 Explain 결과를 비교하여, 인덱스 추가 전후의 성능 향상을 기록합니다.
 
 #### 시나리오 1: 유저 토큰 발급 및 대기열 등록
-- **쿼리:** `SELECT * FROM User WHERE id = ?`
+- **쿼리:** `SELECT * FROM QueueItem WHERE user_id  = ?`
 - **인덱스 추가 전:**
     - 실행 시간: 150ms
     - Explain 결과: Seq Scan on User
