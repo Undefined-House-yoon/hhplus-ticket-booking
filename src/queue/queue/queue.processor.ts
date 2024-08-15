@@ -1,26 +1,10 @@
-import { Processor, Process, OnQueueCompleted, OnQueueFailed } from '@nestjs/bull';
-import { Job } from 'bull';
+import { Processor, WorkerHost } from '@nestjs/bullmq';
+import { Job } from 'bullmq';
 
-@Processor('task-queue')
-export class QueueProcessor {
-  @Process('task')
-  async handleTask(job: Job) {
-    console.log(`Processing task: ${job.data.task}`);
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    console.log(`Task '${job.data.task}' processed successfully`);
-  }
-
-  @OnQueueCompleted()
-  async onComplete(job: Job) {
-    console.log(`Job ${job.id} completed`);
-    const state = await job.getState();
-    console.log(`Job state after completion: ${state}`);
-  }
-
-  @OnQueueFailed()
-  async onFailed(job: Job, error: any) {
-    console.log(`Job ${job.id} failed: ${error}`);
-    const state = await job.getState();
-    console.log(`Job state after failure: ${state}`);
+@Processor('userQueue')
+export class QueueProcessor extends WorkerHost {
+  async process(job: Job<{ userId: number }, any, string>): Promise<any> {
+    console.log(`Processing user ${job.data.userId}`);
+    // 여기에 사용자 처리 로직을 구현합니다.
   }
 }

@@ -1,14 +1,16 @@
-import { Body, Controller, Post } from '@nestjs/common';
-import { QueueService } from './queue.service';
+import { Controller, Post, Body, UseGuards, Req } from '@nestjs/common';
+import { BullQueueService } from './bull-queue.service';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('queue')
 export class QueueController {
-  constructor(private readonly queueService: QueueService) {
-  }
+  constructor(private readonly queueService: BullQueueService) {}
 
   @Post('add')
-  async addTask(@Body('task') task: string) {
-    await this.queueService.addTask(task);
-    return 'Task added to queue';
+  @UseGuards(AuthGuard('jwt'))
+  async addToQueue(@Req() req)
+  {
+    const user= req.user;
+    return this.queueService.addToQueue(user.userId);
   }
 }

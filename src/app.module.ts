@@ -7,18 +7,20 @@ import { ConcertModule } from './api/concerts/concert.module';
 import { PrismaModule } from './api/prisma.module';
 import { AuthConfigModule } from './api/auth-config.module';
 import { ReservationModule } from './api/reservation/reservation.module';
-import { BullModule } from '@nestjs/bull';
 import { QueueModule } from './queue/queue.module';
 import { RedisCacheModule } from './api/cache.module';
 import { PaymentModule } from './api/payment/payment.module';
 import { AuthModule } from './api/auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
+import { BullModule } from '@nestjs/bullmq';
+import { KafkaModule } from './queue/kafka.module';
+import { KafkajsModule } from './queue/kafka/kafkajs.module';
 
 @Module({
-  imports: [RedisCacheModule,
+  imports: [RedisCacheModule,KafkaModule,
     BullModule.forRoot({
-    redis: {
+      connection: {
       host: 'localhost',
       port: 6379,
     },
@@ -29,6 +31,7 @@ import { ScheduleModule } from '@nestjs/schedule';
       removeOnFail: true,
     },
   }),
+    KafkajsModule,
     ScheduleModule.forRoot(),
     ConfigModule.forRoot({isGlobal:true}),
     AuthModule,

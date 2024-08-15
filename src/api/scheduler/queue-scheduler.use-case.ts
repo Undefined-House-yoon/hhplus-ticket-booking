@@ -13,7 +13,7 @@ export class QueueScheduler {
   ) {}
 
 
-  @Cron(CronExpression.EVERY_10_SECONDS)
+  @Cron(CronExpression.EVERY_5_MINUTES)
   async handleCron() {
     this.logger.debug('Starting scheduled queue processing');
 

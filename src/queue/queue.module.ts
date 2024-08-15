@@ -1,16 +1,16 @@
 import { Module } from '@nestjs/common';
-import { QueueService } from './queue/queue.service';
+import { BullQueueService } from './queue/bull-queue.service';
 import { QueueController } from './queue/queue.controller';
-import { BullModule } from '@nestjs/bull';
 import { QueueProcessor } from './queue/queue.processor';
+import { BullModule } from '@nestjs/bullmq';
 
 @Module({
   imports: [
     BullModule.registerQueue({
-      name: 'task-queue',
+      name: 'userQueue',
     }),
   ],
-  providers: [QueueService,QueueProcessor],
+  providers: [BullQueueService,QueueProcessor],
   controllers: [QueueController]
 })
 export class QueueModule {}
