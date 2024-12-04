@@ -59,4 +59,17 @@
 [ERD Table](erd_table.md)
 
 
-스케줄러로 관리.;;
+## swagger
+[swagger](swagger.md)
+
+## API 명세서
+
+API 명세서는 아래 링크에서 확인할 수 있습니다:
+
+[API 명세서 보기](API명세.md)
+
+## 성능 테스트 보고서
+
+자세한 성능 테스트 결과는 아래 링크에서 확인할 수 있습니다:
+
+[성능 테스트 보고서 보기](report.md)
